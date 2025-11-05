@@ -44,6 +44,43 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)
     `);
 
+    // Create projects table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS projects (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create project_members table (for team members and roles)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS project_members (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        role VARCHAR(50) NOT NULL DEFAULT 'member',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(project_id, user_id)
+      )
+    `);
+
+    // Create indexes for better performance
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_projects_owner_id ON projects(owner_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_project_members_project_id ON project_members(project_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_project_members_user_id ON project_members(user_id)
+    `);
+
     console.log('✅ Database tables initialized successfully');
   } catch (error) {
     console.error('❌ Error initializing database:', error.message);

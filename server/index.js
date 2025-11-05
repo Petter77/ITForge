@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const { initializeDatabase } = require('./config/database');
 const authRoutes = require('./routes/auth');
+const projectRoutes = require('./routes/projects');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
