@@ -1,12 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  --jetbrains-black: #000000;
+  --jetbrains-dark: #1e1e1e;
+  --jetbrains-blue: #4E86D9;
+  --jetbrains-blue-hover: #3d6bb8;
+  --jetbrains-gray: #f5f5f5;
+  --jetbrains-text: #232323;
+  --jetbrains-text-secondary: #6e6e6e;
+  
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
 
-  color-scheme: light dark;
-
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -16,5 +23,30 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: #ffffff;
+  color: var(--jetbrains-text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
