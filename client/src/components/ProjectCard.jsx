@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 const ProjectCard = ({ project }) => {
+  const navigate = useNavigate();
+
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -16,8 +20,7 @@ const ProjectCard = ({ project }) => {
   };
 
   const handleClick = () => {
-    // TODO: Navigate to project page when route is ready
-    console.log('Navigate to project:', project.id);
+    navigate(`/projects/${project.id}`);
   };
 
   return (

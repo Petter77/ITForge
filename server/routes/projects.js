@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Project = require('../models/Project');
 const authMiddleware = require('../middleware/auth');
+const projectMemberRoutes = require('./projectMembers');
 
 const router = express.Router();
 
@@ -147,6 +148,9 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
+// Mount project members routes
+router.use('/:projectId/members', projectMemberRoutes);
 
 module.exports = router;
 
