@@ -81,6 +81,40 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_project_members_user_id ON project_members(user_id)
     `);
 
+    // Create project_invitations table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS project_invitations (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        inviter_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        role VARCHAR(50) NOT NULL DEFAULT 'member',
+        status VARCHAR(20) NOT NULL DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create partial unique index for pending invitations only
+    await pool.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_project_invitations_pending_unique 
+      ON project_invitations(project_id, user_id) 
+      WHERE status = 'pending'
+    `);
+
+    // Create indexes for invitations
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_project_invitations_user_id ON project_invitations(user_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_project_invitations_project_id ON project_invitations(project_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_project_invitations_status ON project_invitations(status)
+    `);
+
     console.log('✅ Database tables initialized successfully');
   } catch (error) {
     console.error('❌ Error initializing database:', error.message);

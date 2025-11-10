@@ -7,7 +7,7 @@ const ProjectCard = ({ project }) => {
     if (!dateString) return '';
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return '';
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleDateString('pl-PL', { 
       year: 'numeric', 
       month: 'short', 
       day: 'numeric' 
@@ -16,7 +16,13 @@ const ProjectCard = ({ project }) => {
 
   const formatRole = (role) => {
     if (!role) return '';
-    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+    const roleMap = {
+      'owner': 'Właściciel',
+      'admin': 'Administrator',
+      'member': 'Członek',
+      'observer': 'Obserwator'
+    };
+    return roleMap[role.toLowerCase()] || role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
   };
 
   const handleClick = () => {
@@ -48,14 +54,14 @@ const ProjectCard = ({ project }) => {
       <div className="flex items-center justify-between text-xs text-gray-500">
         <div className="flex items-center space-x-4">
           {project.updatedAt && (
-            <span>Updated {formatDate(project.updatedAt)}</span>
+            <span>Zaktualizowano {formatDate(project.updatedAt)}</span>
           )}
           {project.memberCount !== undefined && (
             <span className="flex items-center">
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
-              {project.memberCount} member{project.memberCount !== 1 ? 's' : ''}
+              {project.memberCount} {project.memberCount === 1 ? 'członek' : 'członków'}
             </span>
           )}
         </div>

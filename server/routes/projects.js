@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
     res.json({ projects });
   } catch (error) {
     console.error('Get projects error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Błąd serwera', error: error.message });
   }
 });
 
@@ -30,13 +30,13 @@ router.get('/:id', async (req, res) => {
     const project = await Project.findById(req.params.id, req.user.id);
     
     if (!project) {
-      return res.status(404).json({ message: 'Project not found or access denied' });
+      return res.status(404).json({ message: 'Projekt nie został znaleziony lub dostęp zabroniony' });
     }
 
     res.json({ project });
   } catch (error) {
     console.error('Get project error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Błąd serwera', error: error.message });
   }
 });
 
@@ -49,14 +49,14 @@ router.post(
     body('name')
       .trim()
       .notEmpty()
-      .withMessage('Project name is required')
+      .withMessage('Nazwa projektu jest wymagana')
       .isLength({ min: 1, max: 255 })
-      .withMessage('Project name must be between 1 and 255 characters'),
+      .withMessage('Nazwa projektu musi mieć od 1 do 255 znaków'),
     body('description')
       .optional()
       .trim()
       .isLength({ max: 2000 })
-      .withMessage('Description must be less than 2000 characters'),
+      .withMessage('Opis musi mieć mniej niż 2000 znaków'),
   ],
   async (req, res) => {
     try {
@@ -76,12 +76,12 @@ router.post(
       const projectWithDetails = await Project.findById(project.id, req.user.id);
 
       res.status(201).json({
-        message: 'Project created successfully',
+        message: 'Projekt został utworzony pomyślnie',
         project: projectWithDetails,
       });
     } catch (error) {
       console.error('Create project error:', error);
-      res.status(500).json({ message: 'Server error', error: error.message });
+      res.status(500).json({ message: 'Błąd serwera', error: error.message });
     }
   }
 );
@@ -96,12 +96,12 @@ router.put(
       .optional()
       .trim()
       .isLength({ min: 1, max: 255 })
-      .withMessage('Project name must be between 1 and 255 characters'),
+      .withMessage('Nazwa projektu musi mieć od 1 do 255 znaków'),
     body('description')
       .optional()
       .trim()
       .isLength({ max: 2000 })
-      .withMessage('Description must be less than 2000 characters'),
+      .withMessage('Opis musi mieć mniej niż 2000 znaków'),
   ],
   async (req, res) => {
     try {
@@ -120,7 +120,7 @@ router.put(
       const projectWithDetails = await Project.findById(project.id, req.user.id);
 
       res.json({
-        message: 'Project updated successfully',
+        message: 'Projekt został zaktualizowany pomyślnie',
         project: projectWithDetails,
       });
     } catch (error) {
@@ -128,7 +128,7 @@ router.put(
         return res.status(403).json({ message: error.message });
       }
       console.error('Update project error:', error);
-      res.status(500).json({ message: 'Server error', error: error.message });
+      res.status(500).json({ message: 'Błąd serwera', error: error.message });
     }
   }
 );
@@ -139,13 +139,13 @@ router.put(
 router.delete('/:id', async (req, res) => {
   try {
     await Project.delete(req.params.id, req.user.id);
-    res.json({ message: 'Project deleted successfully' });
+    res.json({ message: 'Projekt został usunięty pomyślnie' });
   } catch (error) {
     if (error.message.includes('Only project owner')) {
       return res.status(403).json({ message: error.message });
     }
     console.error('Delete project error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Błąd serwera', error: error.message });
   }
 });
 

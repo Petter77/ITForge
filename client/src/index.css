@@ -25,6 +25,7 @@ body {
   min-height: 100vh;
   background-color: #ffffff;
   color: var(--jetbrains-text);
+  zoom: 1.5;
 }
 
 * {

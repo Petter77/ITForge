@@ -37,7 +37,7 @@ const Register = () => {
 
     // Client-side validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError('Hasła nie są identyczne');
       return;
     }
 
@@ -53,7 +53,7 @@ const Register = () => {
     if (result.success) {
       navigate('/dashboard');
     } else {
-      setError(result.error || 'Registration failed');
+      setError(result.error || 'Rejestracja nie powiodła się');
       if (result.errors) {
         const errorMap = {};
         result.errors.forEach((err) => {
@@ -73,15 +73,15 @@ const Register = () => {
         <div>
           <h1 className="text-center text-3xl font-bold text-black mb-2">ITForge</h1>
           <h2 className="text-center text-2xl font-semibold text-gray-900">
-            Create your account
+            Utwórz swoje konto
           </h2>
           <p className="mt-3 text-center text-sm text-gray-600">
-            Already have an account?{' '}
+            Masz już konto?{' '}
             <Link
               to="/login"
               className="font-medium text-[#4E86D9] hover:text-[#3d6bb8] transition-colors"
             >
-              Sign in
+              Zaloguj się
             </Link>
           </p>
         </div>
@@ -99,7 +99,7 @@ const Register = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
+                  Imię
                 </label>
                 <input
                   id="firstName"
@@ -117,7 +117,7 @@ const Register = () => {
               </div>
               <div>
                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
+                  Nazwisko
                 </label>
                 <input
                   id="lastName"
@@ -136,7 +136,7 @@ const Register = () => {
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email address
+                Adres e-mail
               </label>
               <input
                 id="email"
@@ -155,7 +155,7 @@ const Register = () => {
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+                Hasło
               </label>
               <input
                 id="password"
@@ -164,7 +164,7 @@ const Register = () => {
                 autoComplete="new-password"
                 required
                 className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm transition-colors"
-                placeholder="Enter your password"
+                placeholder="Wprowadź hasło"
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -172,12 +172,12 @@ const Register = () => {
                 <p className="mt-1 text-sm text-red-600">{errors.password}</p>
               )}
               <p className="mt-1 text-xs text-gray-500">
-                Must contain uppercase, lowercase, and number (min. 6 characters)
+                Musi zawierać wielką literę, małą literę i cyfrę (min. 6 znaków)
               </p>
             </div>
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password
+                Potwierdź hasło
               </label>
               <input
                 id="confirmPassword"
@@ -186,7 +186,7 @@ const Register = () => {
                 autoComplete="new-password"
                 required
                 className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm transition-colors"
-                placeholder="Confirm your password"
+                placeholder="Potwierdź hasło"
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
@@ -199,7 +199,7 @@ const Register = () => {
               disabled={loading}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#4E86D9] hover:bg-[#3d6bb8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4E86D9] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
-              {loading ? 'Creating account...' : 'Create account'}
+              {loading ? 'Tworzenie konta...' : 'Utwórz konto'}
             </button>
           </div>
         </form>

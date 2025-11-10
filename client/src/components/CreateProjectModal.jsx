@@ -28,7 +28,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
     setError('');
 
     if (!formData.name.trim()) {
-      setError('Project name is required');
+      setError('Nazwa projektu jest wymagana');
       return;
     }
 
@@ -39,7 +39,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
       setFormData({ name: '', description: '' });
       onClose();
     } catch (err) {
-      setError(err.message || 'Failed to create project');
+      setError(err.message || 'Nie udało się utworzyć projektu');
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
               <div className="sm:flex sm:items-start">
                 <div className="w-full">
                   <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-4" id="modal-title">
-                    Create New Project
+                    Utwórz Nowy Projekt
                   </h3>
                   
                   {error && (
@@ -84,7 +84,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                        Project Name <span className="text-red-500">*</span>
+                        Nazwa Projektu <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -94,14 +94,14 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
                         value={formData.name}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm"
-                        placeholder="My Awesome Project"
+                        placeholder="Mój Wspaniały Projekt"
                         disabled={loading}
                       />
                     </div>
 
                     <div>
                       <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                        Description
+                        Opis
                       </label>
                       <textarea
                         name="description"
@@ -110,7 +110,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
                         value={formData.description}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm"
-                        placeholder="Brief description of your project..."
+                        placeholder="Krótki opis Twojego projektu..."
                         disabled={loading}
                       />
                     </div>
@@ -125,7 +125,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
                 disabled={loading}
                 className="inline-flex w-full justify-center rounded-md bg-[#4E86D9] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#3d6bb8] focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:ml-3 sm:w-auto transition-colors"
               >
-                {loading ? 'Creating...' : 'Create Project'}
+                {loading ? 'Tworzenie...' : 'Utwórz Projekt'}
               </button>
               <button
                 type="button"
@@ -133,7 +133,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
                 disabled={loading}
                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#4E86D9] disabled:opacity-50 disabled:cursor-not-allowed sm:mt-0 sm:w-auto transition-colors"
               >
-                Cancel
+                Anuluj
               </button>
             </div>
           </form>

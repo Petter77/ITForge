@@ -20,14 +20,14 @@ router.get('/', async (req, res) => {
     // Check if user has access to this project
     const project = await Project.findById(projectId, req.user.id);
     if (!project) {
-      return res.status(404).json({ message: 'Project not found or access denied' });
+      return res.status(404).json({ message: 'Projekt nie został znaleziony lub dostęp zabroniony' });
     }
 
     const members = await ProjectMember.findByProjectId(projectId);
     res.json({ members });
   } catch (error) {
     console.error('Get members error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Błąd serwera', error: error.message });
   }
 });
 
@@ -37,11 +37,11 @@ router.get('/', async (req, res) => {
 router.post(
   '/',
   [
-    body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email'),
+    body('email').isEmail().normalizeEmail().withMessage('Podaj prawidłowy adres e-mail'),
     body('role')
       .optional()
-      .isIn(['owner', 'member', 'observer'])
-      .withMessage('Role must be owner, member, or observer'),
+      .isIn(['admin', 'member', 'observer'])
+      .withMessage('Rola musi być admin, member lub observer'),
   ],
   async (req, res) => {
     try {
@@ -53,36 +53,60 @@ router.post(
       const projectId = req.params.projectId;
       const { email, role = 'member' } = req.body;
 
-      // Check if user is owner of the project
+      // Check if user is owner or admin of the project
       const project = await Project.findById(projectId, req.user.id);
-      if (!project || project.role !== 'owner') {
-        return res.status(403).json({ message: 'Only project owner can add members' });
+      if (!project || (project.role !== 'owner' && project.role !== 'admin')) {
+        return res.status(403).json({ message: 'Tylko właściciel lub administrator projektu może dodawać członków' });
+      }
+      
+      // Prevent assigning 'owner' role - only the project creator can be owner
+      if (role === 'owner') {
+        return res.status(400).json({ message: 'Nie można przypisać roli właściciela. Tylko założyciel projektu może być właścicielem.' });
       }
 
       // Find user by email
       const user = await User.findByEmail(email);
       if (!user) {
-        return res.status(404).json({ message: 'User with this email not found' });
+        return res.status(404).json({ message: 'Użytkownik z tym adresem e-mail nie został znaleziony' });
       }
 
       // Check if user is not already a member
       const existingMember = await ProjectMember.findByProjectAndUser(projectId, user.id);
       if (existingMember) {
-        return res.status(400).json({ message: 'User is already a member of this project' });
+        return res.status(400).json({ message: 'Użytkownik jest już członkiem tego projektu' });
       }
 
-      // Add member
-      await ProjectMember.addMember(projectId, user.id, role);
+      // Instead of adding directly, send an invitation
+      const ProjectInvitation = require('../models/ProjectInvitation');
+      
+      // Check if there's already a pending invitation
+      const existingInvitations = await ProjectInvitation.findByUserId(user.id, 'pending');
+      const existingInvitation = existingInvitations.find(inv => inv.projectId === projectId);
+      if (existingInvitation) {
+        return res.status(400).json({ message: 'Użytkownik ma już oczekujące zaproszenie do tego projektu' });
+      }
+
+      // Create invitation
+      const invitation = await ProjectInvitation.create({
+        projectId,
+        userId: user.id,
+        inviterId: req.user.id,
+        role,
+      });
+
+      if (!invitation) {
+        return res.status(400).json({ message: 'Nie udało się utworzyć zaproszenia' });
+      }
 
       // Get updated member list
       const members = await ProjectMember.findByProjectId(projectId);
       res.status(201).json({
-        message: 'Member added successfully',
+        message: 'Zaproszenie zostało wysłane pomyślnie',
         members,
       });
     } catch (error) {
       console.error('Add member error:', error);
-      res.status(500).json({ message: 'Server error', error: error.message });
+      res.status(500).json({ message: 'Błąd serwera', error: error.message });
     }
   }
 );
@@ -94,8 +118,8 @@ router.put(
   '/:userId',
   [
     body('role')
-      .isIn(['owner', 'member', 'observer'])
-      .withMessage('Role must be owner, member, or observer'),
+      .isIn(['admin', 'member', 'observer'])
+      .withMessage('Rola musi być admin, member lub observer'),
   ],
   async (req, res) => {
     try {
@@ -108,25 +132,26 @@ router.put(
       const userId = parseInt(req.params.userId);
       const { role } = req.body;
 
-      // Check if user is owner of the project
+      // Check if user is owner or admin of the project
       const project = await Project.findById(projectId, req.user.id);
-      if (!project || project.role !== 'owner') {
-        return res.status(403).json({ message: 'Only project owner can update member roles' });
+      if (!project || (project.role !== 'owner' && project.role !== 'admin')) {
+        return res.status(403).json({ message: 'Tylko właściciel lub administrator projektu może aktualizować role członków' });
       }
 
       // Check if member exists
       const member = await ProjectMember.findByProjectAndUser(projectId, userId);
       if (!member) {
-        return res.status(404).json({ message: 'Member not found' });
+        return res.status(404).json({ message: 'Członek nie został znaleziony' });
       }
 
-      // Prevent removing the last owner
-      if (member.role === 'owner' && role !== 'owner') {
-        const owners = await ProjectMember.findByProjectId(projectId);
-        const ownerCount = owners.filter(m => m.role === 'owner').length;
-        if (ownerCount === 1) {
-          return res.status(400).json({ message: 'Cannot remove the last owner from the project' });
-        }
+      // Prevent assigning 'owner' role - only the project creator can be owner
+      if (role === 'owner') {
+        return res.status(400).json({ message: 'Nie można przypisać roli właściciela. Tylko założyciel projektu może być właścicielem.' });
+      }
+
+      // Prevent changing owner's role - owner role cannot be changed
+      if (member.role === 'owner') {
+        return res.status(403).json({ message: 'Nie można zmienić roli właściciela. Rola właściciela projektu jest stała.' });
       }
 
       // Update role
@@ -135,12 +160,12 @@ router.put(
       // Get updated member list
       const members = await ProjectMember.findByProjectId(projectId);
       res.json({
-        message: 'Member role updated successfully',
+        message: 'Rola członka została zaktualizowana pomyślnie',
         members,
       });
     } catch (error) {
       console.error('Update member role error:', error);
-      res.status(500).json({ message: 'Server error', error: error.message });
+      res.status(500).json({ message: 'Błąd serwera', error: error.message });
     }
   }
 );
@@ -156,7 +181,7 @@ router.delete('/:userId', async (req, res) => {
     // Check if user has access to the project
     const project = await Project.findById(projectId, req.user.id);
     if (!project) {
-      return res.status(404).json({ message: 'Project not found or access denied' });
+      return res.status(404).json({ message: 'Projekt nie został znaleziony lub dostęp zabroniony' });
     }
 
     // Check if member exists
@@ -165,21 +190,17 @@ router.delete('/:userId', async (req, res) => {
       return res.status(404).json({ message: 'Member not found' });
     }
 
-    // Allow removal if: user is owner OR user is removing themselves
-    const isOwner = project.role === 'owner';
+    // Allow removal if: user is owner/admin OR user is removing themselves
+    const isOwnerOrAdmin = project.role === 'owner' || project.role === 'admin';
     const isSelfRemoval = req.user.id === userId;
 
-    if (!isOwner && !isSelfRemoval) {
-      return res.status(403).json({ message: 'Only project owner can remove members' });
+    if (!isOwnerOrAdmin && !isSelfRemoval) {
+      return res.status(403).json({ message: 'Tylko właściciel lub administrator projektu może usuwać członków' });
     }
 
-    // Prevent removing the last owner
-    if (member.role === 'owner' && isOwner) {
-      const owners = await ProjectMember.findByProjectId(projectId);
-      const ownerCount = owners.filter(m => m.role === 'owner').length;
-      if (ownerCount === 1) {
-        return res.status(400).json({ message: 'Cannot remove the last owner from the project' });
-      }
+    // Prevent removing the owner (only owner can remove themselves, but not recommended)
+    if (member.role === 'owner') {
+      return res.status(403).json({ message: 'Nie można usunąć właściciela projektu' });
     }
 
     // Remove member
@@ -188,12 +209,12 @@ router.delete('/:userId', async (req, res) => {
     // Get updated member list
     const members = await ProjectMember.findByProjectId(projectId);
     res.json({
-      message: 'Member removed successfully',
+      message: 'Członek został usunięty pomyślnie',
       members,
     });
   } catch (error) {
     console.error('Remove member error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Błąd serwera', error: error.message });
   }
 });
 

@@ -20,7 +20,7 @@ const Login = () => {
     if (result.success) {
       navigate('/dashboard');
     } else {
-      setError(result.error || 'Login failed');
+      setError(result.error || 'Logowanie nie powiodło się');
     }
 
     setLoading(false);
@@ -32,15 +32,15 @@ const Login = () => {
         <div>
           <h1 className="text-center text-3xl font-bold text-black mb-2">ITForge</h1>
           <h2 className="text-center text-2xl font-semibold text-gray-900">
-            Sign in to your account
+            Zaloguj się do swojego konta
           </h2>
           <p className="mt-3 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
+            Nie masz konta?{' '}
             <Link
               to="/register"
               className="font-medium text-[#4E86D9] hover:text-[#3d6bb8] transition-colors"
             >
-              Create one
+              Utwórz je
             </Link>
           </p>
         </div>
@@ -57,7 +57,7 @@ const Login = () => {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email address
+                Adres e-mail
               </label>
               <input
                 id="email"
@@ -73,7 +73,7 @@ const Login = () => {
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+                Hasło
               </label>
               <input
                 id="password"
@@ -82,7 +82,7 @@ const Login = () => {
                 autoComplete="current-password"
                 required
                 className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm transition-colors"
-                placeholder="Enter your password"
+                placeholder="Wprowadź hasło"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -95,7 +95,7 @@ const Login = () => {
               disabled={loading}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#4E86D9] hover:bg-[#3d6bb8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4E86D9] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? 'Logowanie...' : 'Zaloguj się'}
             </button>
           </div>
         </form>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
+import ConfirmModal from './ConfirmModal';
+import AlertModal from './AlertModal';
 
 const TeamManagement = ({ projectId, userRole }) => {
   const { user: currentUser } = useAuth();
@@ -11,8 +13,12 @@ const TeamManagement = ({ projectId, userRole }) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('member');
   const [adding, setAdding] = useState(false);
+  
+  // Modals
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, userId: null, memberName: '' });
+  const [alertModal, setAlertModal] = useState({ isOpen: false, title: '', message: '', type: 'info' });
 
-  const isOwner = userRole === 'owner';
+  const isOwnerOrAdmin = userRole === 'owner' || userRole === 'admin';
 
   useEffect(() => {
     fetchMembers();
@@ -26,7 +32,7 @@ const TeamManagement = ({ projectId, userRole }) => {
       setMembers(response.data.members || []);
     } catch (err) {
       console.error('Error fetching members:', err);
-      setError('Failed to load team members');
+      setError('Nie udało się załadować członków zespołu');
     } finally {
       setLoading(false);
     }
@@ -46,8 +52,15 @@ const TeamManagement = ({ projectId, userRole }) => {
       setEmail('');
       setRole('member');
       setIsAddModalOpen(false);
+      // Show success message
+      setAlertModal({
+        isOpen: true,
+        title: 'Sukces',
+        message: 'Zaproszenie zostało wysłane pomyślnie!',
+        type: 'success',
+      });
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Failed to add member';
+      const errorMessage = err.response?.data?.message || 'Nie udało się wysłać zaproszenia';
       setError(errorMessage);
     } finally {
       setAdding(false);
@@ -60,35 +73,72 @@ const TeamManagement = ({ projectId, userRole }) => {
         role: newRole,
       });
       setMembers(response.data.members);
+      setAlertModal({
+        isOpen: true,
+        title: 'Sukces',
+        message: 'Rola członka została zaktualizowana pomyślnie',
+        type: 'success',
+      });
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Failed to update role';
-      setError(errorMessage);
+      const errorMessage = err.response?.data?.message || 'Nie udało się zaktualizować roli';
+      setAlertModal({
+        isOpen: true,
+        title: 'Błąd',
+        message: errorMessage,
+        type: 'error',
+      });
     }
   };
 
-  const handleRemoveMember = async (userId) => {
-    if (!window.confirm('Are you sure you want to remove this member from the project?')) {
-      return;
-    }
+  const handleRemoveMemberClick = (userId, memberName) => {
+    setConfirmModal({
+      isOpen: true,
+      userId,
+      memberName,
+    });
+  };
 
+  const handleRemoveMember = async () => {
+    const { userId } = confirmModal;
     try {
       const response = await api.delete(`/projects/${projectId}/members/${userId}`);
       setMembers(response.data.members);
+      setAlertModal({
+        isOpen: true,
+        title: 'Sukces',
+        message: 'Członek został usunięty pomyślnie',
+        type: 'success',
+      });
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Failed to remove member';
-      setError(errorMessage);
+      const errorMessage = err.response?.data?.message || 'Nie udało się usunąć członka';
+      setAlertModal({
+        isOpen: true,
+        title: 'Błąd',
+        message: errorMessage,
+        type: 'error',
+      });
+    } finally {
+      setConfirmModal({ isOpen: false, userId: null, memberName: '' });
     }
   };
 
   const formatRole = (role) => {
     if (!role) return '';
-    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+    const roleMap = {
+      'owner': 'Właściciel',
+      'admin': 'Administrator',
+      'member': 'Członek',
+      'observer': 'Obserwator'
+    };
+    return roleMap[role.toLowerCase()] || role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
   };
 
   const getRoleBadgeColor = (role) => {
     switch (role) {
       case 'owner':
         return 'bg-purple-100 text-purple-700';
+      case 'admin':
+        return 'bg-indigo-100 text-indigo-700';
       case 'member':
         return 'bg-blue-100 text-blue-700';
       case 'observer':
@@ -101,7 +151,7 @@ const TeamManagement = ({ projectId, userRole }) => {
   if (loading) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-8">
-        <div className="text-center text-gray-600">Loading team members...</div>
+        <div className="text-center text-gray-600">Ładowanie członków zespołu...</div>
       </div>
     );
   }
@@ -110,12 +160,12 @@ const TeamManagement = ({ projectId, userRole }) => {
     <div className="bg-white rounded-lg border border-gray-200 p-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">Team Members</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">Członkowie Zespołu</h2>
           <p className="text-gray-600 mt-1">
-            Manage team members, roles, and permissions for this project.
+            Zarządzaj członkami zespołu, rolami i uprawnieniami dla tego projektu.
           </p>
         </div>
-        {isOwner && (
+        {isOwnerOrAdmin && (
           <button
             onClick={() => setIsAddModalOpen(true)}
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#4E86D9] hover:bg-[#3d6bb8] rounded-md transition-colors"
@@ -123,7 +173,7 @@ const TeamManagement = ({ projectId, userRole }) => {
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            Add Member
+            Dodaj Członka
           </button>
         )}
       </div>
@@ -137,13 +187,13 @@ const TeamManagement = ({ projectId, userRole }) => {
       <div className="space-y-3">
         {members.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            <p>No team members yet.</p>
-            {isOwner && (
+            <p>Brak członków zespołu.</p>
+            {isOwnerOrAdmin && (
               <button
                 onClick={() => setIsAddModalOpen(true)}
                 className="mt-4 text-[#4E86D9] hover:text-[#3d6bb8]"
               >
-                Add your first team member
+                Dodaj pierwszego członka zespołu
               </button>
             )}
           </div>
@@ -168,25 +218,25 @@ const TeamManagement = ({ projectId, userRole }) => {
               </div>
 
               <div className="flex items-center space-x-4">
-                {isOwner ? (
+                {isOwnerOrAdmin ? (
                   <>
                     <select
                       value={member.role}
                       onChange={(e) => handleUpdateRole(member.userId, e.target.value)}
                       className="px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9]"
-                      disabled={member.userId === currentUser?.id && member.role === 'owner'}
+                      disabled={member.role === 'owner'}
                     >
-                      <option value="owner">Owner</option>
-                      <option value="member">Member</option>
-                      <option value="observer">Observer</option>
+                      <option value="owner">Właściciel</option>
+                      <option value="admin">Administrator</option>
+                      <option value="member">Członek</option>
+                      <option value="observer">Obserwator</option>
                     </select>
-                    {member.userId !== currentUser?.id && (
+                    {member.userId !== currentUser?.id && member.role !== 'owner' && (
                       <button
-                        onClick={() => handleRemoveMember(member.userId)}
+                        onClick={() => handleRemoveMemberClick(member.userId, `${member.firstName} ${member.lastName}`)}
                         className="px-3 py-1.5 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
-                        disabled={member.role === 'owner' && members.filter(m => m.role === 'owner').length === 1}
                       >
-                        Remove
+                        Usuń
                       </button>
                     )}
                   </>
@@ -211,7 +261,7 @@ const TeamManagement = ({ projectId, userRole }) => {
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="w-full">
                     <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-4" id="modal-title">
-                      Add Team Member
+                      Dodaj Członka Zespołu
                     </h3>
 
                     {error && (
@@ -221,26 +271,28 @@ const TeamManagement = ({ projectId, userRole }) => {
                     )}
 
                     <div className="space-y-4">
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                          Email Address <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm"
-                          placeholder="user@example.com"
-                          disabled={adding}
-                        />
-                        <p className="mt-1 text-xs text-gray-500">User must be registered in the system</p>
-                      </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                        Adres e-mail <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm"
+                        placeholder="user@example.com"
+                        disabled={adding}
+                      />
+                      <p className="mt-1 text-xs text-gray-500">
+                        Zaproszenie zostanie wysłane do tego użytkownika. Musi je zaakceptować, aby dołączyć do projektu.
+                      </p>
+                    </div>
 
                       <div>
                         <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-                          Role <span className="text-red-500">*</span>
+                          Rola <span className="text-red-500">*</span>
                         </label>
                         <select
                           id="role"
@@ -249,12 +301,12 @@ const TeamManagement = ({ projectId, userRole }) => {
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:border-[#4E86D9] sm:text-sm"
                           disabled={adding}
                         >
-                          <option value="member">Member</option>
-                          <option value="observer">Observer</option>
-                          <option value="owner">Owner</option>
+                          <option value="admin">Administrator</option>
+                          <option value="member">Członek</option>
+                          <option value="observer">Obserwator</option>
                         </select>
                         <p className="mt-1 text-xs text-gray-500">
-                          Owner: Full access | Member: Can create/edit tasks | Observer: Read-only
+                          Administrator: Zarządzanie zespołem | Członek: Może tworzyć/edytować zadania | Obserwator: Tylko do odczytu
                         </p>
                       </div>
                     </div>
@@ -267,7 +319,7 @@ const TeamManagement = ({ projectId, userRole }) => {
                     disabled={adding}
                     className="inline-flex w-full justify-center rounded-md bg-[#4E86D9] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#3d6bb8] focus:outline-none focus:ring-2 focus:ring-[#4E86D9] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:ml-3 sm:w-auto transition-colors"
                   >
-                    {adding ? 'Adding...' : 'Add Member'}
+                    {adding ? 'Dodawanie...' : 'Dodaj Członka'}
                   </button>
                   <button
                     type="button"
@@ -280,7 +332,7 @@ const TeamManagement = ({ projectId, userRole }) => {
                     disabled={adding}
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#4E86D9] disabled:opacity-50 disabled:cursor-not-allowed sm:mt-0 sm:w-auto transition-colors"
                   >
-                    Cancel
+                    Anuluj
                   </button>
                 </div>
               </form>
@@ -288,6 +340,27 @@ const TeamManagement = ({ projectId, userRole }) => {
           </div>
         </div>
       )}
+
+      {/* Confirm Remove Member Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, userId: null, memberName: '' })}
+        onConfirm={handleRemoveMember}
+        title="Usuń Członka Zespołu"
+        message={`Czy na pewno chcesz usunąć ${confirmModal.memberName} z tego projektu? Tej akcji nie można cofnąć.`}
+        confirmText="Usuń"
+        cancelText="Anuluj"
+        type="danger"
+      />
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, title: '', message: '', type: 'info' })}
+        title={alertModal.title}
+        message={alertModal.message}
+        type={alertModal.type}
+      />
     </div>
   );
 };

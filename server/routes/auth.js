@@ -21,14 +21,14 @@ const generateToken = (userId) => {
 router.post(
   '/register',
   [
-    body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email'),
+    body('email').isEmail().normalizeEmail().withMessage('Podaj prawidłowy adres e-mail'),
     body('password')
       .isLength({ min: 6 })
-      .withMessage('Password must be at least 6 characters long')
+      .withMessage('Hasło musi mieć co najmniej 6 znaków')
       .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-      .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
-    body('firstName').trim().notEmpty().withMessage('First name is required'),
-    body('lastName').trim().notEmpty().withMessage('Last name is required'),
+      .withMessage('Hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę i jedną cyfrę'),
+    body('firstName').trim().notEmpty().withMessage('Imię jest wymagane'),
+    body('lastName').trim().notEmpty().withMessage('Nazwisko jest wymagane'),
   ],
   async (req, res) => {
     try {
@@ -42,7 +42,7 @@ router.post(
       // Check if user already exists
       const existingUser = await User.findByEmail(email);
       if (existingUser) {
-        return res.status(400).json({ message: 'User with this email already exists' });
+        return res.status(400).json({ message: 'Użytkownik z tym adresem e-mail już istnieje' });
       }
 
       // Create new user
@@ -57,7 +57,7 @@ router.post(
       const token = generateToken(user.id);
 
       res.status(201).json({
-        message: 'User registered successfully',
+        message: 'Użytkownik został zarejestrowany pomyślnie',
         token,
         user: {
           id: user.id,
@@ -68,7 +68,7 @@ router.post(
       });
     } catch (error) {
       console.error('Registration error:', error);
-      res.status(500).json({ message: 'Server error during registration', error: error.message });
+      res.status(500).json({ message: 'Błąd serwera podczas rejestracji', error: error.message });
     }
   }
 );
@@ -79,8 +79,8 @@ router.post(
 router.post(
   '/login',
   [
-    body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email'),
-    body('password').notEmpty().withMessage('Password is required'),
+    body('email').isEmail().normalizeEmail().withMessage('Podaj prawidłowy adres e-mail'),
+    body('password').notEmpty().withMessage('Hasło jest wymagane'),
   ],
   async (req, res) => {
     try {
@@ -94,20 +94,20 @@ router.post(
       // Find user by email
       const user = await User.findByEmail(email);
       if (!user) {
-        return res.status(401).json({ message: 'Invalid email or password' });
+        return res.status(401).json({ message: 'Nieprawidłowy e-mail lub hasło' });
       }
 
       // Verify password
       const isPasswordValid = await User.verifyPassword(password, user.password_hash);
       if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid email or password' });
+        return res.status(401).json({ message: 'Nieprawidłowy e-mail lub hasło' });
       }
 
       // Generate token
       const token = generateToken(user.id);
 
       res.json({
-        message: 'Login successful',
+        message: 'Logowanie zakończone sukcesem',
         token,
         user: {
           id: user.id,
@@ -118,7 +118,7 @@ router.post(
       });
     } catch (error) {
       console.error('Login error:', error);
-      res.status(500).json({ message: 'Server error during login', error: error.message });
+      res.status(500).json({ message: 'Błąd serwera podczas logowania', error: error.message });
     }
   }
 );
@@ -138,7 +138,7 @@ router.get('/me', authMiddleware, async (req, res) => {
     });
   } catch (error) {
     console.error('Get user error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Błąd serwera', error: error.message });
   }
 });
 

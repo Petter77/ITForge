@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Notifications from './Notifications';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -17,7 +18,8 @@ const Navbar = () => {
               <h1 className="text-xl font-bold text-white tracking-tight">ITForge</h1>
             </Link>
           </div>
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
+            <Notifications />
             <span className="text-gray-300 text-sm">
               {user?.firstName} {user?.lastName}
             </span>
@@ -25,7 +27,7 @@ const Navbar = () => {
               onClick={logout}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#4E86D9] hover:bg-[#3d6bb8] transition-colors duration-200 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4E86D9] focus:ring-offset-black"
             >
-              Logout
+              Wyloguj
             </button>
           </div>
         </div>

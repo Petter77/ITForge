@@ -108,10 +108,10 @@ class Project {
   }
 
   static async update(projectId, userId, { name, description }) {
-    // Check if user is owner or has permission
+    // Check if user is owner or admin
     const project = await this.findById(projectId, userId);
-    if (!project || project.role !== 'owner') {
-      throw new Error('Only project owner can update the project');
+    if (!project || (project.role !== 'owner' && project.role !== 'admin')) {
+      throw new Error('Tylko właściciel lub administrator projektu może zaktualizować projekt');
     }
 
     const result = await pool.query(
@@ -126,10 +126,16 @@ class Project {
   }
 
   static async delete(projectId, userId) {
-    // Check if user is owner
+    // Only the project owner (creator) can delete the project
     const project = await this.findById(projectId, userId);
     if (!project || project.role !== 'owner') {
-      throw new Error('Only project owner can delete the project');
+      throw new Error('Tylko właściciel projektu może usunąć projekt');
+    }
+    
+    // Double check that user is the actual project creator
+    const projectData = await pool.query('SELECT owner_id FROM projects WHERE id = $1', [projectId]);
+    if (projectData.rows.length === 0 || projectData.rows[0].owner_id !== userId) {
+      throw new Error('Tylko właściciel projektu może usunąć projekt');
     }
 
     await pool.query('DELETE FROM projects WHERE id = $1', [projectId]);

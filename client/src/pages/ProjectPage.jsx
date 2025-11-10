@@ -30,18 +30,18 @@ const ProjectPage = () => {
   };
 
   const tabs = [
-    { id: 'kanban', name: 'Kanban', icon: '📋' },
-    { id: 'gantt', name: 'Gantt', icon: '📊' },
-    { id: 'backlog', name: 'Backlog', icon: '📝' },
-    { id: 'team', name: 'Team', icon: '👥' },
-    { id: 'reports', name: 'Reports', icon: '📈' },
-    { id: 'settings', name: 'Settings', icon: '⚙️' },
+    { id: 'kanban', name: 'Kanban'},
+    { id: 'gantt', name: 'Gantt'},
+    { id: 'backlog', name: 'Backlog'},
+    { id: 'team', name: 'Zespół'},
+    { id: 'reports', name: 'Raporty'},
+    { id: 'settings', name: 'Ustawienia'},
   ];
 
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-gray-600">Loading project...</div>
+        <div className="text-gray-600">Ładowanie projektu...</div>
       </div>
     );
   }
@@ -50,12 +50,12 @@ const ProjectPage = () => {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Project not found</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Projekt nie został znaleziony</h2>
           <button
             onClick={() => navigate('/dashboard')}
             className="text-[#4E86D9] hover:text-[#3d6bb8]"
           >
-            Back to Dashboard
+            Powrót do Panelu
           </button>
         </div>
       </div>
@@ -67,15 +67,15 @@ const ProjectPage = () => {
       case 'kanban':
         return (
           <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Kanban Board</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Tablica Kanban</h2>
             <p className="text-gray-600">
-              Your Kanban board will be displayed here. Drag and drop tasks between columns to manage your workflow.
+              Twoja tablica Kanban zostanie wyświetlona tutaj. Przeciągaj i upuszczaj zadania między kolumnami, aby zarządzać przepływem pracy.
             </p>
             <div className="mt-8 grid grid-cols-4 gap-4">
-              {['Backlog', 'To Do', 'In Progress', 'Done'].map((column) => (
+              {['Backlog', 'Do zrobienia', 'W trakcie', 'Zakończone'].map((column) => (
                 <div key={column} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                   <h3 className="font-semibold text-gray-900 mb-2">{column}</h3>
-                  <p className="text-sm text-gray-500">No tasks yet</p>
+                  <p className="text-sm text-gray-500">Brak zadań</p>
                 </div>
               ))}
             </div>
@@ -84,30 +84,30 @@ const ProjectPage = () => {
       case 'gantt':
         return (
           <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Gantt Chart</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Wykres Gantta</h2>
             <p className="text-gray-600">
-              Interactive Gantt chart showing project timeline, dependencies, and task scheduling will be displayed here.
+              Interaktywny wykres Gantta pokazujący harmonogram projektu, zależności i planowanie zadań zostanie wyświetlony tutaj.
             </p>
             <div className="mt-8 bg-gray-50 rounded-lg p-8 border border-gray-200">
-              <p className="text-center text-gray-500">Gantt chart placeholder</p>
+              <p className="text-center text-gray-500">Wykres Gantta - miejsce na zawartość</p>
             </div>
           </div>
         );
       case 'backlog':
         return (
           <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Backlog & Sprints</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Backlog i Sprinty</h2>
             <p className="text-gray-600 mb-4">
-              Manage your product backlog, plan sprints, and track progress.
+              Zarządzaj backlogiem produktu, planuj sprinty i śledź postępy.
             </p>
             <div className="mt-8 space-y-4">
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Product Backlog</h3>
-                <p className="text-sm text-gray-500">No backlog items yet</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Backlog Produktu</h3>
+                <p className="text-sm text-gray-500">Brak elementów w backlogu</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Active Sprints</h3>
-                <p className="text-sm text-gray-500">No active sprints</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Aktywne Sprinty</h3>
+                <p className="text-sm text-gray-500">Brak aktywnych sprintów</p>
               </div>
             </div>
           </div>
@@ -117,26 +117,26 @@ const ProjectPage = () => {
       case 'reports':
         return (
           <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Reports & Analytics</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Raporty i Analizy</h2>
             <p className="text-gray-600 mb-6">
-              View project progress, team workload, and detailed analytics.
+              Przeglądaj postęp projektu, obciążenie zespołu i szczegółowe analizy.
             </p>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Project Progress</h3>
-                <p className="text-sm text-gray-500">No data available</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Postęp Projektu</h3>
+                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Team Workload</h3>
-                <p className="text-sm text-gray-500">No data available</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Obciążenie Zespołu</h3>
+                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Burn-down Chart</h3>
-                <p className="text-sm text-gray-500">No data available</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Wykres Burn-down</h3>
+                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Velocity</h3>
-                <p className="text-sm text-gray-500">No data available</p>
+                <h3 className="font-semibold text-gray-900 mb-2">Prędkość</h3>
+                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
               </div>
             </div>
           </div>
@@ -144,16 +144,16 @@ const ProjectPage = () => {
       case 'settings':
         return (
           <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Project Settings</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Ustawienia Projektu</h2>
             <p className="text-gray-600 mb-6">
-              Configure project settings, permissions, and integrations.
+              Skonfiguruj ustawienia projektu, uprawnienia i integracje.
             </p>
             <div className="mt-8 space-y-6">
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-4">General Settings</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Ustawienia Ogólne</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nazwa Projektu</label>
                     <input
                       type="text"
                       value={project.name}
@@ -162,7 +162,7 @@ const ProjectPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Opis</label>
                     <textarea
                       value={project.description || ''}
                       disabled
@@ -173,8 +173,8 @@ const ProjectPage = () => {
                 </div>
               </div>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-4">Integrations</h3>
-                <p className="text-sm text-gray-500">No integrations configured</p>
+                <h3 className="font-semibold text-gray-900 mb-4">Integracje</h3>
+                <p className="text-sm text-gray-500">Brak skonfigurowanych integracji</p>
               </div>
             </div>
           </div>
@@ -185,58 +185,56 @@ const ProjectPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+    <div className="min-h-screen bg-white flex">
+      {/* Sidebar Navigation */}
+      <div className="w-56 bg-gray-50 border-r border-gray-200 flex-shrink-0">
+        <div className="p-6">
           {/* Header */}
-          <div className="mb-8">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="text-sm text-gray-600 hover:text-gray-900 mb-4 flex items-center"
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to Dashboard
-            </button>
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-4xl font-bold text-black mb-2">{project.name}</h1>
-                {project.description && (
-                  <p className="text-gray-600 text-lg">{project.description}</p>
-                )}
-              </div>
-              <span className="px-3 py-1 text-sm font-medium rounded-full bg-gray-100 text-gray-700">
-                {project.role === 'owner' ? 'Owner' : 'Member'}
-              </span>
-            </div>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="text-sm text-gray-600 hover:text-gray-900 mb-6 flex items-center"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Powrót do Panelu
+          </button>
+          <div className="mb-6">
+            <h1 className="text-xl font-bold text-black mb-3">{project.name}</h1>
+            <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-gray-200 text-gray-700">
+              {project.role === 'owner' ? 'Właściciel' : project.role === 'admin' ? 'Administrator' : project.role === 'member' ? 'Członek' : 'Obserwator'}
+            </span>
           </div>
 
-          {/* Tabs */}
-          <div className="border-b border-gray-200 mb-8">
-            <nav className="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`
-                    whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
-                    ${
-                      activeTab === tab.id
-                        ? 'border-[#4E86D9] text-[#4E86D9]'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }
-                  `}
-                >
-                  <span className="mr-2">{tab.icon}</span>
-                  {tab.name}
-                </button>
-              ))}
-            </nav>
-          </div>
+          {/* Vertical Tabs */}
+          <nav className="space-y-1" aria-label="Tabs">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  w-full text-left py-3 px-4 rounded-lg font-medium text-sm transition-colors
+                  ${
+                    activeTab === tab.id
+                      ? 'bg-[#4E86D9] text-white'
+                      : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900'
+                  }
+                `}
+              >
+                <span className="mr-2">{tab.icon}</span>
+                {tab.name}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
 
-          {/* Tab Content */}
-          <TabContent />
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        <div className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-0">
+            <TabContent />
+          </div>
         </div>
       </div>
     </div>
