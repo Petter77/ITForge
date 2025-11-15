@@ -59,7 +59,7 @@ const CreateProjectModal = ({ isOpen, onClose, onCreate }) => {
     <div className="fixed inset-0 z-[100] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
       {/* Background overlay */}
       <div
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+        className="fixed inset-0 bg-white/30 backdrop-blur-sm transition-opacity"
         onClick={handleClose}
       ></div>
 

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import TeamManagement from '../components/TeamManagement';
+import KanbanBoard from '../components/KanbanBoard';
+import RoleBadge from '../components/RoleBadge';
 
 const ProjectPage = () => {
   const { id } = useParams();
@@ -65,22 +67,7 @@ const ProjectPage = () => {
   const TabContent = () => {
     switch (activeTab) {
       case 'kanban':
-        return (
-          <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Tablica Kanban</h2>
-            <p className="text-gray-600">
-              Twoja tablica Kanban zostanie wyświetlona tutaj. Przeciągaj i upuszczaj zadania między kolumnami, aby zarządzać przepływem pracy.
-            </p>
-            <div className="mt-8 grid grid-cols-4 gap-4">
-              {['Backlog', 'Do zrobienia', 'W trakcie', 'Zakończone'].map((column) => (
-                <div key={column} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <h3 className="font-semibold text-gray-900 mb-2">{column}</h3>
-                  <p className="text-sm text-gray-500">Brak zadań</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
+        return project?.id ? <KanbanBoard projectId={project.id} userRole={project.role} /> : null;
       case 'gantt':
         return (
           <div className="bg-white rounded-lg border border-gray-200 p-8">
@@ -201,9 +188,7 @@ const ProjectPage = () => {
           </button>
           <div className="mb-6">
             <h1 className="text-xl font-bold text-black mb-3">{project.name}</h1>
-            <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-gray-200 text-gray-700">
-              {project.role === 'owner' ? 'Właściciel' : project.role === 'admin' ? 'Administrator' : project.role === 'member' ? 'Członek' : 'Obserwator'}
-            </span>
+            <RoleBadge role={project.role} />
           </div>
 
           {/* Vertical Tabs */}
@@ -231,10 +216,8 @@ const ProjectPage = () => {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        <div className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
-          <div className="px-4 sm:px-0">
-            <TabContent />
-          </div>
+        <div className="w-full h-full py-8 px-6">
+          <TabContent />
         </div>
       </div>
     </div>

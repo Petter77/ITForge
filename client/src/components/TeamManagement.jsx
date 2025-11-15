@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import ConfirmModal from './ConfirmModal';
 import AlertModal from './AlertModal';
+import RoleBadge from './RoleBadge';
 
 const TeamManagement = ({ projectId, userRole }) => {
   const { user: currentUser } = useAuth();
@@ -122,31 +123,6 @@ const TeamManagement = ({ projectId, userRole }) => {
     }
   };
 
-  const formatRole = (role) => {
-    if (!role) return '';
-    const roleMap = {
-      'owner': 'Właściciel',
-      'admin': 'Administrator',
-      'member': 'Członek',
-      'observer': 'Obserwator'
-    };
-    return roleMap[role.toLowerCase()] || role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-  };
-
-  const getRoleBadgeColor = (role) => {
-    switch (role) {
-      case 'owner':
-        return 'bg-purple-100 text-purple-700';
-      case 'admin':
-        return 'bg-indigo-100 text-indigo-700';
-      case 'member':
-        return 'bg-blue-100 text-blue-700';
-      case 'observer':
-        return 'bg-gray-100 text-gray-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
-    }
-  };
 
   if (loading) {
     return (
@@ -241,9 +217,7 @@ const TeamManagement = ({ projectId, userRole }) => {
                     )}
                   </>
                 ) : (
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full ${getRoleBadgeColor(member.role)}`}>
-                    {formatRole(member.role)}
-                  </span>
+                  <RoleBadge role={member.role} />
                 )}
               </div>
             </div>

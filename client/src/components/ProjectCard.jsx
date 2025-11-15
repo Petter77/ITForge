@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import RoleBadge from './RoleBadge';
 
 const ProjectCard = ({ project }) => {
   const navigate = useNavigate();
@@ -14,17 +15,6 @@ const ProjectCard = ({ project }) => {
     });
   };
 
-  const formatRole = (role) => {
-    if (!role) return '';
-    const roleMap = {
-      'owner': 'Właściciel',
-      'admin': 'Administrator',
-      'member': 'Członek',
-      'observer': 'Obserwator'
-    };
-    return roleMap[role.toLowerCase()] || role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-  };
-
   const handleClick = () => {
     navigate(`/projects/${project.id}`);
   };
@@ -38,11 +28,7 @@ const ProjectCard = ({ project }) => {
         <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#4E86D9] transition-colors">
           {project.name}
         </h3>
-        {project.role && (
-          <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
-            {formatRole(project.role)}
-          </span>
-        )}
+        {project.role && <RoleBadge role={project.role} />}
       </div>
       
       {project.description && (

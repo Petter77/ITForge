@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const Project = require('../models/Project');
 const authMiddleware = require('../middleware/auth');
 const projectMemberRoutes = require('./projectMembers');
+const kanbanRoutes = require('./kanban');
 
 const router = express.Router();
 
@@ -151,6 +152,9 @@ router.delete('/:id', async (req, res) => {
 
 // Mount project members routes
 router.use('/:projectId/members', projectMemberRoutes);
+
+// Mount kanban routes
+router.use('/', kanbanRoutes);
 
 module.exports = router;
 

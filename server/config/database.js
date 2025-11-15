@@ -115,6 +115,71 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_project_invitations_status ON project_invitations(status)
     `);
 
+    // Create kanban_columns table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS kanban_columns (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        name VARCHAR(255) NOT NULL,
+        position INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create kanban_tasks table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS kanban_tasks (
+        id SERIAL PRIMARY KEY,
+        column_id INTEGER NOT NULL REFERENCES kanban_columns(id) ON DELETE CASCADE,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        position INTEGER NOT NULL DEFAULT 0,
+        assigned_to INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create indexes for kanban tables
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_kanban_columns_project_id ON kanban_columns(project_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_kanban_tasks_column_id ON kanban_tasks(column_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_kanban_tasks_project_id ON kanban_tasks(project_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_kanban_tasks_assigned_to ON kanban_tasks(assigned_to)
+    `);
+
+    // Create kanban_task_assignees table for multiple assignees
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS kanban_task_assignees (
+        id SERIAL PRIMARY KEY,
+        task_id INTEGER NOT NULL REFERENCES kanban_tasks(id) ON DELETE CASCADE,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(task_id, user_id)
+      )
+    `);
+
+    // Create indexes for task assignees
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_kanban_task_assignees_task_id ON kanban_task_assignees(task_id)
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_kanban_task_assignees_user_id ON kanban_task_assignees(user_id)
+    `);
+
     console.log('✅ Database tables initialized successfully');
   } catch (error) {
     console.error('❌ Error initializing database:', error.message);

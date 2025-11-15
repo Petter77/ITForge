@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import AlertModal from './AlertModal';
+import RoleBadge from './RoleBadge';
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -112,8 +113,8 @@ const Notifications = () => {
                         <p className="text-sm text-gray-600 mt-1">
                           zaprosił Cię do dołączenia do <span className="font-medium">{invitation.project.name}</span>
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Rola: {invitation.role === 'owner' ? 'Właściciel' : invitation.role === 'admin' ? 'Administrator' : invitation.role === 'member' ? 'Członek' : 'Obserwator'}
+                        <p className="text-xs text-gray-500 mt-1 flex items-center gap-2">
+                          Rola: <RoleBadge role={invitation.role} />
                         </p>
                       </div>
                     </div>
