@@ -3,12 +3,36 @@ const { body, validationResult } = require('express-validator');
 const KanbanColumn = require('../models/KanbanColumn');
 const KanbanTask = require('../models/KanbanTask');
 const Project = require('../models/Project');
+const ProjectMember = require('../models/ProjectMember');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router({ mergeParams: true });
 
 // All routes require authentication
 router.use(authMiddleware);
+
+// Helper function to validate that assigned users are not observers
+const validateAssignedUsers = async (projectId, userIds) => {
+  if (!userIds || !Array.isArray(userIds) || userIds.length === 0) {
+    return { valid: true };
+  }
+
+  const members = await ProjectMember.findByProjectId(projectId);
+  const observerIds = members
+    .filter(m => m.role === 'observer')
+    .map(m => m.userId);
+
+  const hasObservers = userIds.some(userId => observerIds.includes(userId));
+  
+  if (hasObservers) {
+    return {
+      valid: false,
+      message: 'Nie można przypisać zadań do obserwatorów. Obserwatorzy mają tylko dostęp do podglądu projektu.'
+    };
+  }
+
+  return { valid: true };
+};
 
 // Middleware to check project access
 const checkProjectAccess = async (req, res, next) => {
@@ -102,6 +126,14 @@ router.post(
       }
 
       const { title, description, columnId, position, assignedTo } = req.body;
+
+      // Validate that assigned users are not observers
+      if (assignedTo && Array.isArray(assignedTo) && assignedTo.length > 0) {
+        const validation = await validateAssignedUsers(req.params.projectId, assignedTo);
+        if (!validation.valid) {
+          return res.status(400).json({ message: validation.message });
+        }
+      }
       const task = await KanbanTask.create({
         columnId,
         projectId: req.params.projectId,
@@ -171,6 +203,14 @@ router.put(
       }
 
       const { title, description, columnId, position, assignedTo } = req.body;
+
+      // Validate that assigned users are not observers
+      if (assignedTo !== undefined && Array.isArray(assignedTo) && assignedTo.length > 0) {
+        const validation = await validateAssignedUsers(req.params.projectId, assignedTo);
+        if (!validation.valid) {
+          return res.status(400).json({ message: validation.message });
+        }
+      }
       const task = await KanbanTask.update(req.params.taskId, req.params.projectId, {
         title,
         description,

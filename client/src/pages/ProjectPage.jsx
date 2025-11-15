@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import TeamManagement from '../components/TeamManagement';
 import KanbanBoard from '../components/KanbanBoard';
+import BacklogAndSprints from '../components/BacklogAndSprints';
 import RoleBadge from '../components/RoleBadge';
 
 const ProjectPage = () => {
@@ -81,24 +82,7 @@ const ProjectPage = () => {
           </div>
         );
       case 'backlog':
-        return (
-          <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Backlog i Sprinty</h2>
-            <p className="text-gray-600 mb-4">
-              Zarządzaj backlogiem produktu, planuj sprinty i śledź postępy.
-            </p>
-            <div className="mt-8 space-y-4">
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Backlog Produktu</h3>
-                <p className="text-sm text-gray-500">Brak elementów w backlogu</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Aktywne Sprinty</h3>
-                <p className="text-sm text-gray-500">Brak aktywnych sprintów</p>
-              </div>
-            </div>
-          </div>
-        );
+        return project?.id ? <BacklogAndSprints projectId={project.id} userRole={project.role} /> : null;
       case 'team':
         return <TeamManagement projectId={project.id} userRole={project.role} />;
       case 'reports':

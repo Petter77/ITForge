@@ -169,7 +169,7 @@ const TaskModal = ({ isOpen, onClose, task, columnId, columns, members, projectI
                 Przypisane do
               </label>
               <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-2">
-                {members.map((member) => {
+                {members.filter(member => member.role !== 'observer').map((member) => {
                   const isSelected = assignedTo.includes(member.userId);
                   return (
                     <label
@@ -197,9 +197,9 @@ const TaskModal = ({ isOpen, onClose, task, columnId, columns, members, projectI
                     </label>
                   );
                 })}
-                {members.length === 0 && (
+                {members.filter(member => member.role !== 'observer').length === 0 && (
                   <p className="text-sm text-gray-500 text-center py-2">
-                    Brak członków w projekcie
+                    Brak członków dostępnych do przypisania
                   </p>
                 )}
               </div>

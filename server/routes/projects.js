@@ -4,6 +4,7 @@ const Project = require('../models/Project');
 const authMiddleware = require('../middleware/auth');
 const projectMemberRoutes = require('./projectMembers');
 const kanbanRoutes = require('./kanban');
+const backlogRoutes = require('./backlog');
 
 const router = express.Router();
 
@@ -155,6 +156,9 @@ router.use('/:projectId/members', projectMemberRoutes);
 
 // Mount kanban routes
 router.use('/', kanbanRoutes);
+
+// Mount backlog routes
+router.use('/', backlogRoutes);
 
 module.exports = router;
 
