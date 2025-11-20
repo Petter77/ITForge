@@ -18,7 +18,9 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import KanbanColumn from './KanbanColumn';
 import TaskModal from './TaskModal';
+import ColumnModal from './ColumnModal';
 import AlertModal from './AlertModal';
+import ConfirmModal from './ConfirmModal';
 
 const KanbanBoard = ({ projectId, userRole }) => {
   const { user } = useAuth();
@@ -28,8 +30,10 @@ const KanbanBoard = ({ projectId, userRole }) => {
   const [error, setError] = useState('');
   const [activeTask, setActiveTask] = useState(null);
   const [taskModal, setTaskModal] = useState({ isOpen: false, task: null, columnId: null });
+  const [columnModal, setColumnModal] = useState({ isOpen: false, column: null });
   const [members, setMembers] = useState([]);
   const [alertModal, setAlertModal] = useState({ isOpen: false, title: '', message: '', type: 'info' });
+  const [deleteColumnConfirm, setDeleteColumnConfirm] = useState({ isOpen: false, columnId: null, columnName: '' });
   const [overColumnId, setOverColumnId] = useState(null);
   
   // Track drag state to prevent click events during drag
@@ -235,6 +239,53 @@ const KanbanBoard = ({ projectId, userRole }) => {
     }
   };
 
+  const handleColumnSave = () => {
+    fetchKanbanData();
+    setColumnModal({ isOpen: false, column: null });
+    setAlertModal({
+      isOpen: true,
+      title: 'Sukces',
+      message: columnModal.column ? 'Kolumna została zaktualizowana' : 'Kolumna została utworzona',
+      type: 'success',
+    });
+  };
+
+  const handleColumnDeleteClick = (columnId) => {
+    const column = columns.find(col => col.id === columnId);
+    if (column) {
+      setDeleteColumnConfirm({
+        isOpen: true,
+        columnId: columnId,
+        columnName: column.name,
+      });
+    }
+  };
+
+  const handleColumnDelete = async () => {
+    if (!deleteColumnConfirm.columnId) return;
+
+    try {
+      await api.delete(`/projects/${projectId}/kanban/columns/${deleteColumnConfirm.columnId}`);
+      await fetchKanbanData();
+      setDeleteColumnConfirm({ isOpen: false, columnId: null, columnName: '' });
+      setAlertModal({
+        isOpen: true,
+        title: 'Sukces',
+        message: 'Kolumna została usunięta pomyślnie',
+        type: 'success',
+      });
+    } catch (err) {
+      console.error('Error deleting column:', err);
+      setDeleteColumnConfirm({ isOpen: false, columnId: null, columnName: '' });
+      setAlertModal({
+        isOpen: true,
+        title: 'Błąd',
+        message: err.response?.data?.message || 'Nie udało się usunąć kolumny',
+        type: 'error',
+      });
+    }
+  };
+
   const closeTaskModal = () => {
     setTaskModal({ isOpen: false, task: null, columnId: null });
   };
@@ -268,6 +319,16 @@ const KanbanBoard = ({ projectId, userRole }) => {
             Zarządzaj zadaniami projektu. Przeciągaj i upuszczaj zadania między kolumnami.
           </p>
         </div>
+        {canEdit && (
+          <button
+            onClick={() => setColumnModal({ isOpen: true, column: null })}
+            disabled={columns.length >= 10}
+            className="px-4 py-2 bg-[#4E86D9] text-white rounded-md hover:bg-[#3d6bb8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title={columns.length >= 10 ? 'Maksymalna liczba kolumn (10) została osiągnięta' : 'Dodaj kolumnę'}
+          >
+            + Dodaj kolumnę
+          </button>
+        )}
       </div>
 
       <DndContext
@@ -279,7 +340,7 @@ const KanbanBoard = ({ projectId, userRole }) => {
         onDragCancel={handleDragCancel}
       >
         <SortableContext items={columnIds} strategy={horizontalListSortingStrategy}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 pb-4">
             {columns.map((column) => {
               const taskIds = (column.tasks || []).map(task => task.id.toString());
               return (
@@ -293,6 +354,8 @@ const KanbanBoard = ({ projectId, userRole }) => {
                     tasks={column.tasks || []}
                     onTaskClick={handleTaskClick}
                     onAddTask={() => handleAddTask(column.id)}
+                    onEdit={(col) => setColumnModal({ isOpen: true, column: col })}
+                    onDelete={handleColumnDeleteClick}
                     isOver={overColumnId === column.id}
                     canEdit={canEdit}
                   />
@@ -329,6 +392,30 @@ const KanbanBoard = ({ projectId, userRole }) => {
           readOnly={!canEdit}
         />
       )}
+
+      {/* Column Modal */}
+      {columnModal.isOpen && (
+        <ColumnModal
+          isOpen={columnModal.isOpen}
+          onClose={() => setColumnModal({ isOpen: false, column: null })}
+          column={columnModal.column}
+          projectId={projectId}
+          onSave={handleColumnSave}
+          onDelete={canEdit ? handleColumnDelete : null}
+        />
+      )}
+
+      {/* Delete Column Confirmation */}
+      <ConfirmModal
+        isOpen={deleteColumnConfirm.isOpen}
+        onClose={() => setDeleteColumnConfirm({ isOpen: false, columnId: null, columnName: '' })}
+        onConfirm={handleColumnDelete}
+        title="Usuń kolumnę"
+        message={`Czy na pewno chcesz usunąć kolumnę "${deleteColumnConfirm.columnName}"? Tej akcji nie można cofnąć. Upewnij się, że kolumna nie zawiera zadań.`}
+        confirmText="Usuń"
+        cancelText="Anuluj"
+        type="danger"
+      />
 
       {/* Alert Modal */}
       <AlertModal

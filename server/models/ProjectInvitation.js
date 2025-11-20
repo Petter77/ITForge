@@ -2,25 +2,38 @@ const { pool } = require('../config/database');
 
 class ProjectInvitation {
   static async create({ projectId, userId, inviterId, role = 'member' }) {
-    // Check if there's already a pending invitation
-    const existing = await pool.query(
-      `SELECT id FROM project_invitations 
-       WHERE project_id = $1 AND user_id = $2 AND status = 'pending'`,
-      [projectId, userId]
-    );
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
 
-    if (existing.rows.length > 0) {
-      return null; // Already exists
+      // Archive any existing pending or previously accepted invitations for this user and project
+      await client.query(
+        `UPDATE project_invitations 
+         SET status = CASE 
+           WHEN status = 'pending' THEN 'cancelled'
+           ELSE 'revoked'
+         END,
+         updated_at = CURRENT_TIMESTAMP
+         WHERE project_id = $1 AND user_id = $2 AND status IN ('pending', 'accepted')`,
+        [projectId, userId]
+      );
+
+      // Create new invitation
+      const result = await client.query(
+        `INSERT INTO project_invitations (project_id, user_id, inviter_id, role, status)
+         VALUES ($1, $2, $3, $4, 'pending')
+         RETURNING *`,
+        [projectId, userId, inviterId, role]
+      );
+
+      await client.query('COMMIT');
+      return result.rows[0] || null;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
     }
-
-    const result = await pool.query(
-      `INSERT INTO project_invitations (project_id, user_id, inviter_id, role, status)
-       VALUES ($1, $2, $3, $4, 'pending')
-       RETURNING *`,
-      [projectId, userId, inviterId, role]
-    );
-
-    return result.rows[0] || null;
   }
 
   static async findByUserId(userId, status = 'pending') {

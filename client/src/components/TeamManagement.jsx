@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import ConfirmModal from './ConfirmModal';
@@ -6,6 +7,7 @@ import AlertModal from './AlertModal';
 import RoleBadge from './RoleBadge';
 
 const TeamManagement = ({ projectId, userRole }) => {
+  const navigate = useNavigate();
   const { user: currentUser } = useAuth();
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,7 @@ const TeamManagement = ({ projectId, userRole }) => {
   const [adding, setAdding] = useState(false);
   
   // Modals
-  const [confirmModal, setConfirmModal] = useState({ isOpen: false, userId: null, memberName: '' });
+  const [confirmModal, setConfirmModal] = useState({ isOpen: false, userId: null, memberName: '', mode: 'remove' });
   const [alertModal, setAlertModal] = useState({ isOpen: false, title: '', message: '', type: 'info' });
 
   const isOwnerOrAdmin = userRole === 'owner' || userRole === 'admin';
@@ -96,6 +98,16 @@ const TeamManagement = ({ projectId, userRole }) => {
       isOpen: true,
       userId,
       memberName,
+      mode: 'remove',
+    });
+  };
+
+  const handleLeaveProjectClick = () => {
+    setConfirmModal({
+      isOpen: true,
+      userId: currentUser?.id || null,
+      memberName: `${currentUser?.firstName || 'Ty'} ${currentUser?.lastName || ''}`.trim(),
+      mode: 'leave',
     });
   };
 
@@ -103,13 +115,25 @@ const TeamManagement = ({ projectId, userRole }) => {
     const { userId } = confirmModal;
     try {
       const response = await api.delete(`/projects/${projectId}/members/${userId}`);
-      setMembers(response.data.members);
-      setAlertModal({
-        isOpen: true,
-        title: 'Sukces',
-        message: 'Członek został usunięty pomyślnie',
-        type: 'success',
-      });
+      const isSelfRemoval = currentUser?.id === userId;
+
+      if (isSelfRemoval) {
+        setAlertModal({
+          isOpen: true,
+          title: 'Sukces',
+          message: 'Opuściłeś projekt pomyślnie',
+          type: 'success',
+        });
+        setTimeout(() => navigate('/dashboard'), 800);
+      } else {
+        setMembers(response.data.members);
+        setAlertModal({
+          isOpen: true,
+          title: 'Sukces',
+          message: 'Członek został usunięty pomyślnie',
+          type: 'success',
+        });
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Nie udało się usunąć członka';
       setAlertModal({
@@ -134,24 +158,34 @@ const TeamManagement = ({ projectId, userRole }) => {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-8">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h2 className="text-2xl font-semibold text-gray-900">Członkowie Zespołu</h2>
           <p className="text-gray-600 mt-1">
             Zarządzaj członkami zespołu, rolami i uprawnieniami dla tego projektu.
           </p>
         </div>
-        {isOwnerOrAdmin && (
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#4E86D9] hover:bg-[#3d6bb8] rounded-md transition-colors"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Dodaj Członka
-          </button>
-        )}
+        <div className="flex flex-wrap gap-3">
+          {isOwnerOrAdmin && (
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#4E86D9] hover:bg-[#3d6bb8] rounded-md transition-colors"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Dodaj Członka
+            </button>
+          )}
+          {userRole !== 'owner' && (
+            <button
+              onClick={handleLeaveProjectClick}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition-colors"
+            >
+              Opuść projekt
+            </button>
+          )}
+        </div>
       </div>
 
       {error && (
@@ -318,11 +352,15 @@ const TeamManagement = ({ projectId, userRole }) => {
       {/* Confirm Remove Member Modal */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}
-        onClose={() => setConfirmModal({ isOpen: false, userId: null, memberName: '' })}
+        onClose={() => setConfirmModal({ isOpen: false, userId: null, memberName: '', mode: 'remove' })}
         onConfirm={handleRemoveMember}
-        title="Usuń Członka Zespołu"
-        message={`Czy na pewno chcesz usunąć ${confirmModal.memberName} z tego projektu? Tej akcji nie można cofnąć.`}
-        confirmText="Usuń"
+        title={confirmModal.mode === 'leave' ? 'Opuść projekt' : 'Usuń Członka Zespołu'}
+        message={
+          confirmModal.mode === 'leave'
+            ? 'Czy na pewno chcesz opuścić ten projekt? Stracisz dostęp do wszystkich jego zasobów.'
+            : `Czy na pewno chcesz usunąć ${confirmModal.memberName} z tego projektu? Tej akcji nie można cofnąć.`
+        }
+        confirmText={confirmModal.mode === 'leave' ? 'Opuść projekt' : 'Usuń'}
         cancelText="Anuluj"
         type="danger"
       />

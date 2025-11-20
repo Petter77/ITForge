@@ -66,12 +66,60 @@ class ProjectMember {
   }
 
   static async removeMember(projectId, userId) {
-    await pool.query(
-      'DELETE FROM project_members WHERE project_id = $1 AND user_id = $2',
-      [projectId, userId]
-    );
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
 
-    return true;
+      // Remove user from kanban task assignees
+      await client.query(
+        `DELETE FROM kanban_task_assignees kta
+         USING kanban_tasks kt
+         WHERE kta.task_id = kt.id
+           AND kt.project_id = $1
+           AND kta.user_id = $2`,
+        [projectId, userId]
+      );
+
+      // Remove user from backlog item assignees
+      await client.query(
+        `DELETE FROM backlog_item_assignees bia
+         USING backlog_items bi
+         WHERE bia.backlog_item_id = bi.id
+           AND bi.project_id = $1
+           AND bia.user_id = $2`,
+        [projectId, userId]
+      );
+
+      // Remove user as risk owner
+      await client.query(
+        `UPDATE risks
+         SET owner_id = NULL
+         WHERE project_id = $1 AND owner_id = $2`,
+        [projectId, userId]
+      );
+
+      // Archive any previous invitations for this user in this project
+      await client.query(
+        `UPDATE project_invitations
+         SET status = 'revoked', updated_at = CURRENT_TIMESTAMP
+         WHERE project_id = $1 AND user_id = $2 AND status IN ('pending', 'accepted')`,
+        [projectId, userId]
+      );
+
+      // Finally remove from project members
+      await client.query(
+        'DELETE FROM project_members WHERE project_id = $1 AND user_id = $2',
+        [projectId, userId]
+      );
+
+      await client.query('COMMIT');
+      return true;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   static async getMemberCount(projectId) {

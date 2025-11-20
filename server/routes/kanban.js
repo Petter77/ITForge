@@ -4,6 +4,7 @@ const KanbanColumn = require('../models/KanbanColumn');
 const KanbanTask = require('../models/KanbanTask');
 const Project = require('../models/Project');
 const ProjectMember = require('../models/ProjectMember');
+const Notification = require('../models/Notification');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router({ mergeParams: true });
@@ -34,6 +35,37 @@ const validateAssignedUsers = async (projectId, userIds) => {
   return { valid: true };
 };
 
+// Helper function to create notifications for newly assigned users
+const createTaskAssignmentNotifications = async (taskId, projectId, newAssignees, oldAssignees = [], taskTitle, createdBy) => {
+  if (!newAssignees || !Array.isArray(newAssignees)) {
+    return;
+  }
+
+  const oldAssigneeIds = oldAssignees.map(a => a.id || a);
+  const newAssigneeIds = newAssignees.map(a => typeof a === 'number' ? a : (a.id || a));
+  
+  // Find users who are newly assigned (not in old assignees)
+  const newlyAssigned = newAssigneeIds.filter(userId => !oldAssigneeIds.includes(userId));
+  
+  // Don't notify the creator if they assigned themselves
+  const usersToNotify = newlyAssigned.filter(userId => userId !== createdBy);
+
+  const project = await Project.findById(projectId, createdBy);
+  if (!project) return;
+
+  for (const userId of usersToNotify) {
+    await Notification.create({
+      userId,
+      projectId,
+      type: 'task_assigned',
+      title: 'Przypisano Cię do zadania',
+      message: `Zostałeś przypisany do zadania "${taskTitle}" w projekcie "${project.name}"`,
+      entityType: 'kanban_task',
+      entityId: taskId,
+    });
+  }
+};
+
 // Middleware to check project access
 const checkProjectAccess = async (req, res, next) => {
   try {
@@ -54,8 +86,13 @@ const checkProjectAccess = async (req, res, next) => {
 // @access  Private
 router.get('/:projectId/kanban', checkProjectAccess, async (req, res) => {
   try {
-    // Initialize default columns if they don't exist
-    const columns = await KanbanColumn.initializeDefaultColumns(req.params.projectId);
+    // Get columns (don't auto-create, let user create them)
+    let columns = await KanbanColumn.findByProjectId(req.params.projectId);
+    
+    // Only initialize default columns if no columns exist at all
+    if (columns.length === 0) {
+      columns = await KanbanColumn.initializeDefaultColumns(req.params.projectId);
+    }
     
     // Get all tasks for the project
     const allTasks = await KanbanTask.findByProjectId(req.params.projectId);
@@ -144,6 +181,18 @@ router.post(
         createdBy: req.user.id,
       });
 
+      // Create notifications for assigned users
+      if (task && assignedTo && Array.isArray(assignedTo) && assignedTo.length > 0) {
+        await createTaskAssignmentNotifications(
+          task.id,
+          req.params.projectId,
+          assignedTo,
+          [],
+          title,
+          req.user.id
+        );
+      }
+
       res.status(201).json({
         message: 'Zadanie zostało utworzone pomyślnie',
         task,
@@ -211,6 +260,11 @@ router.put(
           return res.status(400).json({ message: validation.message });
         }
       }
+
+      // Get old task to compare assignees
+      const oldTask = await KanbanTask.findById(req.params.taskId, req.params.projectId);
+      const oldAssignees = oldTask?.assignedTo || [];
+
       const task = await KanbanTask.update(req.params.taskId, req.params.projectId, {
         title,
         description,
@@ -221,6 +275,19 @@ router.put(
 
       if (!task) {
         return res.status(404).json({ message: 'Zadanie nie zostało znalezione' });
+      }
+
+      // Create notifications for newly assigned users
+      if (assignedTo !== undefined) {
+        const finalTitle = title || task.title;
+        await createTaskAssignmentNotifications(
+          task.id,
+          req.params.projectId,
+          assignedTo || [],
+          oldAssignees,
+          finalTitle,
+          req.user.id
+        );
       }
 
       res.json({
@@ -301,6 +368,129 @@ router.delete('/:projectId/kanban/tasks/:taskId', checkProjectAccess, async (req
     res.json({ message: 'Zadanie zostało usunięte pomyślnie' });
   } catch (error) {
     console.error('Delete task error:', error);
+    res.status(500).json({ message: 'Błąd serwera', error: error.message });
+  }
+});
+
+// @route   POST /api/projects/:projectId/kanban/columns
+// @desc    Create a new column
+// @access  Private
+router.post(
+  '/:projectId/kanban/columns',
+  checkProjectAccess,
+  [
+    body('name')
+      .trim()
+      .notEmpty()
+      .withMessage('Nazwa kolumny jest wymagana')
+      .isLength({ min: 1, max: 255 })
+      .withMessage('Nazwa kolumny musi mieć od 1 do 255 znaków'),
+    body('position').optional().isInt({ min: 0 }),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      // Check maximum columns limit (10)
+      const existingColumns = await KanbanColumn.findByProjectId(req.params.projectId);
+      if (existingColumns.length >= 10) {
+        return res.status(400).json({ 
+          message: 'Maksymalna liczba kolumn to 10. Usuń kolumnę przed dodaniem nowej.' 
+        });
+      }
+
+      const { name, position } = req.body;
+      
+      // If position not provided, add at the end
+      let finalPosition = position;
+      if (finalPosition === undefined || finalPosition === null) {
+        finalPosition = existingColumns.length;
+      }
+
+      const column = await KanbanColumn.create({
+        projectId: req.params.projectId,
+        name,
+        position: finalPosition,
+      });
+
+      res.status(201).json({
+        message: 'Kolumna została utworzona pomyślnie',
+        column,
+      });
+    } catch (error) {
+      console.error('Create column error:', error);
+      res.status(500).json({ message: 'Błąd serwera', error: error.message });
+    }
+  }
+);
+
+// @route   PUT /api/projects/:projectId/kanban/columns/:columnId
+// @desc    Update a column
+// @access  Private
+router.put(
+  '/:projectId/kanban/columns/:columnId',
+  checkProjectAccess,
+  [
+    body('name')
+      .optional()
+      .trim()
+      .isLength({ min: 1, max: 255 })
+      .withMessage('Nazwa kolumny musi mieć od 1 do 255 znaków'),
+    body('position').optional().isInt({ min: 0 }),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { name, position } = req.body;
+
+      const column = await KanbanColumn.update(req.params.columnId, req.params.projectId, {
+        name,
+        position,
+      });
+
+      if (!column) {
+        return res.status(404).json({ message: 'Kolumna nie została znaleziona' });
+      }
+
+      res.json({
+        message: 'Kolumna została zaktualizowana pomyślnie',
+        column,
+      });
+    } catch (error) {
+      console.error('Update column error:', error);
+      res.status(500).json({ message: 'Błąd serwera', error: error.message });
+    }
+  }
+);
+
+// @route   DELETE /api/projects/:projectId/kanban/columns/:columnId
+// @desc    Delete a column
+// @access  Private
+router.delete('/:projectId/kanban/columns/:columnId', checkProjectAccess, async (req, res) => {
+  try {
+    // Check if column has tasks
+    const tasks = await KanbanTask.findByColumnId(req.params.columnId);
+    if (tasks.length > 0) {
+      return res.status(400).json({ 
+        message: 'Nie można usunąć kolumny, która zawiera zadania. Przenieś najpierw zadania do innych kolumn.' 
+      });
+    }
+
+    const deleted = await KanbanColumn.delete(req.params.columnId, req.params.projectId);
+    if (!deleted) {
+      return res.status(404).json({ message: 'Kolumna nie została znaleziona' });
+    }
+
+    res.json({ message: 'Kolumna została usunięta pomyślnie' });
+  } catch (error) {
+    console.error('Delete column error:', error);
     res.status(500).json({ message: 'Błąd serwera', error: error.message });
   }
 });

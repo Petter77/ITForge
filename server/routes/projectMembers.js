@@ -78,15 +78,8 @@ router.post(
 
       // Instead of adding directly, send an invitation
       const ProjectInvitation = require('../models/ProjectInvitation');
-      
-      // Check if there's already a pending invitation
-      const existingInvitations = await ProjectInvitation.findByUserId(user.id, 'pending');
-      const existingInvitation = existingInvitations.find(inv => inv.projectId === projectId);
-      if (existingInvitation) {
-        return res.status(400).json({ message: 'Użytkownik ma już oczekujące zaproszenie do tego projektu' });
-      }
 
-      // Create invitation
+      // Create or reuse invitation
       const invitation = await ProjectInvitation.create({
         projectId,
         userId: user.id,
@@ -94,15 +87,12 @@ router.post(
         role,
       });
 
-      if (!invitation) {
-        return res.status(400).json({ message: 'Nie udało się utworzyć zaproszenia' });
-      }
-
       // Get updated member list
       const members = await ProjectMember.findByProjectId(projectId);
       res.status(201).json({
         message: 'Zaproszenie zostało wysłane pomyślnie',
         members,
+        invitation,
       });
     } catch (error) {
       console.error('Add member error:', error);

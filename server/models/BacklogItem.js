@@ -31,7 +31,16 @@ class BacklogItem {
       query += ` AND bi.sprint_id IS NULL`;
     }
 
-    query += ` ORDER BY bi.position ASC, bi.created_at DESC`;
+    query += ` ORDER BY 
+      CASE bi.priority
+        WHEN 'critical' THEN 1
+        WHEN 'high' THEN 2
+        WHEN 'medium' THEN 3
+        WHEN 'low' THEN 4
+        ELSE 5
+      END ASC,
+      bi.position ASC,
+      bi.created_at DESC`;
 
     const result = await pool.query(query, params);
     const items = result.rows;

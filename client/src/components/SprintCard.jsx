@@ -53,7 +53,10 @@ const SprintCard = ({ sprint, onEdit, onDelete, canEdit = true }) => {
               </svg>
             </button>
             <button
-              onClick={() => onDelete(sprint.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(sprint.id);
+              }}
               className="text-gray-400 hover:text-red-600"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

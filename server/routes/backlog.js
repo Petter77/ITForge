@@ -4,6 +4,7 @@ const BacklogItem = require('../models/BacklogItem');
 const Sprint = require('../models/Sprint');
 const Project = require('../models/Project');
 const ProjectMember = require('../models/ProjectMember');
+const Notification = require('../models/Notification');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router({ mergeParams: true });
@@ -32,6 +33,47 @@ const validateAssignedUsers = async (projectId, userIds) => {
   }
 
   return { valid: true };
+};
+
+// Helper function to create notifications for newly assigned users to backlog items
+const createBacklogItemAssignmentNotifications = async (itemId, projectId, newAssignees, oldAssignees = [], itemTitle, createdBy) => {
+  if (!newAssignees || !Array.isArray(newAssignees)) {
+    return;
+  }
+
+  const oldAssigneeIds = oldAssignees.map(a => a.id || a);
+  const newAssigneeIds = newAssignees.map(a => typeof a === 'number' ? a : (a.id || a));
+  
+  // Find users who are newly assigned (not in old assignees)
+  const newlyAssigned = newAssigneeIds.filter(userId => !oldAssigneeIds.includes(userId));
+  
+  // Don't notify the creator if they assigned themselves
+  const usersToNotify = newlyAssigned.filter(userId => userId !== createdBy);
+
+  const project = await Project.findById(projectId, createdBy);
+  if (!project) return;
+
+  // Get backlog item to check if it's in a sprint
+  const item = await BacklogItem.findById(itemId, projectId);
+  let sprintInfo = '';
+  if (item && item.sprint_id) {
+    const sprint = await Sprint.findById(item.sprint_id, projectId);
+    if (sprint) {
+      sprintInfo = ` w sprincie "${sprint.name}"`;
+    }
+  }
+
+  for (const userId of usersToNotify) {
+    await Notification.create({
+      userId,
+      projectId,
+      type: 'backlog_item_assigned',
+      title: 'Przypisano Cię do elementu backlogu',
+      message: `Zostałeś przypisany do elementu backlogu "${itemTitle}" w projekcie "${project.name}"${sprintInfo}`,
+      entityType: 'backlog_item',
+      entityId: itemId,
+    });
+  }
 };
 
 // Middleware to check project access
@@ -79,9 +121,20 @@ router.post(
     body('description').optional().trim(),
     body('type').optional().isIn(['story', 'bug', 'task', 'epic']),
     body('priority').optional().isIn(['low', 'medium', 'high', 'critical']),
-    body('storyPoints').optional().isInt({ min: 0 }),
+    body('storyPoints').optional({ nullable: true, checkFalsy: true }).custom((value) => {
+      if (value === null || value === undefined || value === '') {
+        return true;
+      }
+      const num = Number(value);
+      return Number.isInteger(num) && num >= 0;
+    }).withMessage('Story Points musi być liczbą całkowitą większą lub równą 0'),
     body('status').optional().isIn(['todo', 'in_progress', 'done']),
-    body('sprintId').optional().isInt(),
+    body('sprintId').optional({ nullable: true, checkFalsy: true }).custom((value) => {
+      if (value === null || value === undefined || value === '') {
+        return true;
+      }
+      return Number.isInteger(Number(value));
+    }).withMessage('Sprint ID musi być liczbą całkowitą'),
     body('assignedTo').optional().isArray(),
     body('assignedTo.*').optional().isInt(),
   ],
@@ -123,6 +176,18 @@ router.post(
         createdBy: req.user.id,
       });
 
+      // Create notifications for assigned users
+      if (item && assignedTo && Array.isArray(assignedTo) && assignedTo.length > 0) {
+        await createBacklogItemAssignmentNotifications(
+          item.id,
+          req.params.projectId,
+          assignedTo,
+          [],
+          title,
+          req.user.id
+        );
+      }
+
       res.status(201).json({
         message: 'Element backlogu został utworzony pomyślnie',
         item,
@@ -145,9 +210,20 @@ router.put(
     body('description').optional().trim(),
     body('type').optional().isIn(['story', 'bug', 'task', 'epic']),
     body('priority').optional().isIn(['low', 'medium', 'high', 'critical']),
-    body('storyPoints').optional().isInt({ min: 0 }),
+    body('storyPoints').optional({ nullable: true, checkFalsy: true }).custom((value) => {
+      if (value === null || value === undefined || value === '') {
+        return true;
+      }
+      const num = Number(value);
+      return Number.isInteger(num) && num >= 0;
+    }).withMessage('Story Points musi być liczbą całkowitą większą lub równą 0'),
     body('status').optional().isIn(['todo', 'in_progress', 'done']),
-    body('sprintId').optional().isInt(),
+    body('sprintId').optional({ nullable: true, checkFalsy: true }).custom((value) => {
+      if (value === null || value === undefined || value === '') {
+        return true;
+      }
+      return Number.isInteger(Number(value));
+    }).withMessage('Sprint ID musi być liczbą całkowitą'),
     body('assignedTo').optional().isArray(),
     body('assignedTo.*').optional().isInt(),
   ],
@@ -176,6 +252,10 @@ router.put(
         }
       }
 
+      // Get old item to compare assignees
+      const oldItem = await BacklogItem.findById(req.params.itemId, req.params.projectId);
+      const oldAssignees = oldItem?.assignedTo || [];
+
       const item = await BacklogItem.update(req.params.itemId, req.params.projectId, {
         title,
         description,
@@ -189,6 +269,19 @@ router.put(
 
       if (!item) {
         return res.status(404).json({ message: 'Element backlogu nie został znaleziony' });
+      }
+
+      // Create notifications for newly assigned users
+      if (assignedTo !== undefined) {
+        const finalTitle = title || item.title;
+        await createBacklogItemAssignmentNotifications(
+          item.id,
+          req.params.projectId,
+          assignedTo || [],
+          oldAssignees,
+          finalTitle,
+          req.user.id
+        );
       }
 
       res.json({
@@ -226,7 +319,12 @@ router.put(
   '/:projectId/backlog/items/:itemId/move',
   checkProjectAccess,
   [
-    body('sprintId').optional().isInt(),
+    body('sprintId').optional({ nullable: true, checkFalsy: true }).custom((value) => {
+      if (value === null || value === undefined || value === '') {
+        return true;
+      }
+      return Number.isInteger(Number(value));
+    }).withMessage('Sprint ID musi być liczbą całkowitą'),
     body('position').optional().isInt({ min: 0 }),
   ],
   async (req, res) => {

@@ -44,7 +44,7 @@ const BacklogItemModal = ({ isOpen, onClose, item, projectId, sprints, members, 
       }
       setError('');
     }
-  }, [isOpen, item]);
+  }, [isOpen, item, defaultSprintId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +54,8 @@ const BacklogItemModal = ({ isOpen, onClose, item, projectId, sprints, members, 
     setLoading(true);
 
     try {
+      const finalSprintId = hideSprintSelection ? (defaultSprintId || null) : (selectedSprintId || null);
+      
       const itemData = {
         title,
         description: description || null,
@@ -61,7 +63,7 @@ const BacklogItemModal = ({ isOpen, onClose, item, projectId, sprints, members, 
         priority,
         storyPoints: storyPoints ? parseInt(storyPoints) : null,
         status,
-        sprintId: selectedSprintId || null,
+        ...(finalSprintId !== null && { sprintId: finalSprintId }),
         assignedTo: assignedTo.length > 0 ? assignedTo : [],
       };
 
@@ -300,7 +302,7 @@ const BacklogItemModal = ({ isOpen, onClose, item, projectId, sprints, members, 
             message="Czy na pewno chcesz usunąć ten element backlogu? Tej akcji nie można cofnąć."
             confirmText="Usuń"
             cancelText="Anuluj"
-            variant="danger"
+            type="danger"
           />
         </div>
       </div>

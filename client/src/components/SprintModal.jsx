@@ -204,7 +204,7 @@ const SprintModal = ({ isOpen, onClose, sprint, projectId, onSave, onDelete }) =
             message="Czy na pewno chcesz usunąć ten sprint? Wszystkie elementy zostaną przeniesione do backlogu. Tej akcji nie można cofnąć."
             confirmText="Usuń"
             cancelText="Anuluj"
-            variant="danger"
+            type="danger"
           />
         </div>
       </div>

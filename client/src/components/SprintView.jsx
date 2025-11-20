@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import AlertModal from './AlertModal';
+import ConfirmModal from './ConfirmModal';
 import BacklogItemModal from './BacklogItemModal';
 import BacklogItemCard from './BacklogItemCard';
 
@@ -14,6 +15,8 @@ const SprintView = ({ sprint, projectId, userRole, onBack, onSprintUpdate, onSpr
   const [error, setError] = useState('');
   const [itemModal, setItemModal] = useState({ isOpen: false, item: null });
   const [alertModal, setAlertModal] = useState({ isOpen: false, title: '', message: '', type: 'info' });
+  const [deleteSprintConfirm, setDeleteSprintConfirm] = useState({ isOpen: false });
+  const [deleteItemConfirm, setDeleteItemConfirm] = useState({ isOpen: false, itemId: null, itemTitle: '' });
 
   useEffect(() => {
     if (sprint) {
@@ -54,10 +57,21 @@ const SprintView = ({ sprint, projectId, userRole, onBack, onSprintUpdate, onSpr
     });
   };
 
-  const handleItemDelete = async (itemId) => {
+  const handleItemDeleteClick = (itemId, itemTitle) => {
+    setDeleteItemConfirm({
+      isOpen: true,
+      itemId: itemId,
+      itemTitle: itemTitle,
+    });
+  };
+
+  const handleItemDelete = async () => {
+    if (!deleteItemConfirm.itemId) return;
+
     try {
-      await api.delete(`/projects/${projectId}/backlog/items/${itemId}`);
+      await api.delete(`/projects/${projectId}/backlog/items/${deleteItemConfirm.itemId}`);
       await fetchData();
+      setDeleteItemConfirm({ isOpen: false, itemId: null, itemTitle: '' });
       setAlertModal({
         isOpen: true,
         title: 'Sukces',
@@ -66,12 +80,24 @@ const SprintView = ({ sprint, projectId, userRole, onBack, onSprintUpdate, onSpr
       });
     } catch (err) {
       console.error('Error deleting item:', err);
+      setDeleteItemConfirm({ isOpen: false, itemId: null, itemTitle: '' });
       setAlertModal({
         isOpen: true,
         title: 'Błąd',
         message: err.response?.data?.message || 'Nie udało się usunąć elementu',
         type: 'error',
       });
+    }
+  };
+
+  const handleSprintDeleteClick = () => {
+    setDeleteSprintConfirm({ isOpen: true });
+  };
+
+  const handleSprintDeleteConfirmed = async () => {
+    setDeleteSprintConfirm({ isOpen: false });
+    if (onSprintDelete) {
+      await onSprintDelete(sprint.id);
     }
   };
 
@@ -158,7 +184,7 @@ const SprintView = ({ sprint, projectId, userRole, onBack, onSprintUpdate, onSpr
                 Edytuj sprint
               </button>
               <button
-                onClick={() => onSprintDelete(sprint.id)}
+                onClick={handleSprintDeleteClick}
                 className="px-4 py-2 text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
               >
                 Usuń sprint
@@ -213,7 +239,10 @@ const SprintView = ({ sprint, projectId, userRole, onBack, onSprintUpdate, onSpr
               item={item}
               sprints={[sprint]}
               onEdit={() => setItemModal({ isOpen: true, item })}
-              onDelete={handleItemDelete}
+              onDelete={(itemId) => {
+                const item = items.find(i => i.id === itemId);
+                handleItemDeleteClick(itemId, item?.title || '');
+              }}
               onMoveToSprint={() => {}}
               canEdit={canEdit}
             />
@@ -233,7 +262,10 @@ const SprintView = ({ sprint, projectId, userRole, onBack, onSprintUpdate, onSpr
           defaultSprintId={sprint.id}
           hideSprintSelection={true}
           onSave={handleItemSave}
-          onDelete={canEdit ? handleItemDelete : null}
+          onDelete={canEdit ? (itemId) => {
+            const item = items.find(i => i.id === itemId);
+            handleItemDeleteClick(itemId, item?.title || '');
+          } : null}
         />
       )}
 
@@ -243,6 +275,30 @@ const SprintView = ({ sprint, projectId, userRole, onBack, onSprintUpdate, onSpr
         title={alertModal.title}
         message={alertModal.message}
         type={alertModal.type}
+      />
+
+      {/* Delete Sprint Confirmation */}
+      <ConfirmModal
+        isOpen={deleteSprintConfirm.isOpen}
+        onClose={() => setDeleteSprintConfirm({ isOpen: false })}
+        onConfirm={handleSprintDeleteConfirmed}
+        title="Usuń sprint"
+        message={`Czy na pewno chcesz usunąć sprint "${sprint.name}"? Wszystkie elementy zostaną przeniesione do backlogu. Tej operacji nie można cofnąć.`}
+        confirmText="Usuń"
+        cancelText="Anuluj"
+        type="danger"
+      />
+
+      {/* Delete Item Confirmation */}
+      <ConfirmModal
+        isOpen={deleteItemConfirm.isOpen}
+        onClose={() => setDeleteItemConfirm({ isOpen: false, itemId: null, itemTitle: '' })}
+        onConfirm={handleItemDelete}
+        title="Usuń element"
+        message={`Czy na pewno chcesz usunąć element "${deleteItemConfirm.itemTitle}"? Tej operacji nie można cofnąć.`}
+        confirmText="Usuń"
+        cancelText="Anuluj"
+        type="danger"
       />
     </div>
   );

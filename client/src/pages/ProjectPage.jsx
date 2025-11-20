@@ -5,6 +5,9 @@ import api from '../utils/api';
 import TeamManagement from '../components/TeamManagement';
 import KanbanBoard from '../components/KanbanBoard';
 import BacklogAndSprints from '../components/BacklogAndSprints';
+import ProjectSettings from '../components/ProjectSettings';
+import RequirementsManagement from '../components/RequirementsManagement';
+import RiskManagement from '../components/RiskManagement';
 import RoleBadge from '../components/RoleBadge';
 
 const ProjectPage = () => {
@@ -36,6 +39,8 @@ const ProjectPage = () => {
     { id: 'kanban', name: 'Kanban'},
     { id: 'gantt', name: 'Gantt'},
     { id: 'backlog', name: 'Backlog'},
+    { id: 'requirements', name: 'Wymagania'},
+    { id: 'risks', name: 'Ryzyka'},
     { id: 'team', name: 'Zespół'},
     { id: 'reports', name: 'Raporty'},
     { id: 'settings', name: 'Ustawienia'},
@@ -83,6 +88,10 @@ const ProjectPage = () => {
         );
       case 'backlog':
         return project?.id ? <BacklogAndSprints projectId={project.id} userRole={project.role} /> : null;
+      case 'requirements':
+        return project?.id ? <RequirementsManagement projectId={project.id} userRole={project.role} /> : null;
+      case 'risks':
+        return project?.id ? <RiskManagement projectId={project.id} userRole={project.role} /> : null;
       case 'team':
         return <TeamManagement projectId={project.id} userRole={project.role} />;
       case 'reports':
@@ -114,41 +123,12 @@ const ProjectPage = () => {
         );
       case 'settings':
         return (
-          <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Ustawienia Projektu</h2>
-            <p className="text-gray-600 mb-6">
-              Skonfiguruj ustawienia projektu, uprawnienia i integracje.
-            </p>
-            <div className="mt-8 space-y-6">
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-4">Ustawienia Ogólne</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Nazwa Projektu</label>
-                    <input
-                      type="text"
-                      value={project.name}
-                      disabled
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Opis</label>
-                    <textarea
-                      value={project.description || ''}
-                      disabled
-                      rows="3"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-4">Integracje</h3>
-                <p className="text-sm text-gray-500">Brak skonfigurowanych integracji</p>
-              </div>
-            </div>
-          </div>
+          <ProjectSettings
+            project={project}
+            onProjectUpdate={(updatedProject) => {
+              setProject(updatedProject);
+            }}
+          />
         );
       default:
         return null;

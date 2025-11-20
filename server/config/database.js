@@ -180,6 +180,110 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_kanban_task_assignees_user_id ON kanban_task_assignees(user_id)
     `);
 
+    // Create notifications table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        type VARCHAR(50) NOT NULL CHECK (type IN ('task_assigned', 'backlog_item_assigned', 'invitation')),
+        title VARCHAR(255) NOT NULL,
+        message TEXT NOT NULL,
+        entity_type VARCHAR(50) CHECK (entity_type IN ('kanban_task', 'backlog_item')),
+        entity_id INTEGER,
+        is_read BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create indexes for notifications
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_notifications_project_id ON notifications(project_id)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_notifications_user_read ON notifications(user_id, is_read)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON notifications(created_at DESC)
+    `);
+
+    // Create requirements table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS requirements (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        type VARCHAR(50) NOT NULL CHECK (type IN ('functional', 'non-functional')),
+        priority VARCHAR(50) DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'critical')),
+        status VARCHAR(50) DEFAULT 'draft' CHECK (status IN ('draft', 'approved', 'implemented', 'rejected')),
+        created_by INTEGER NOT NULL REFERENCES users(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create indexes for requirements
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_requirements_project_id ON requirements(project_id)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_requirements_type ON requirements(type)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_requirements_status ON requirements(status)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_requirements_priority ON requirements(priority)
+    `);
+
+    // Create risk settings table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS risk_settings (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL UNIQUE REFERENCES projects(id) ON DELETE CASCADE,
+        probability_scale JSONB NOT NULL DEFAULT '[]'::jsonb,
+        impact_scale JSONB NOT NULL DEFAULT '[]'::jsonb,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS risks (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        probability_value INTEGER NOT NULL,
+        probability_label VARCHAR(100) NOT NULL,
+        impact_value INTEGER NOT NULL,
+        impact_label VARCHAR(100) NOT NULL,
+        status VARCHAR(50) DEFAULT 'open' CHECK (status IN ('open', 'monitoring', 'resolved', 'closed')),
+        response_plan TEXT,
+        owner_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_risks_project_id ON risks(project_id)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_risks_status ON risks(status)
+    `);
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_risks_owner_id ON risks(owner_id)
+    `);
+
     console.log('✅ Database tables initialized successfully');
   } catch (error) {
     console.error('❌ Error initializing database:', error.message);

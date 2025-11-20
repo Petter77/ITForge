@@ -5,6 +5,8 @@ const authMiddleware = require('../middleware/auth');
 const projectMemberRoutes = require('./projectMembers');
 const kanbanRoutes = require('./kanban');
 const backlogRoutes = require('./backlog');
+const requirementsRoutes = require('./requirements');
+const riskRoutes = require('./risks');
 
 const router = express.Router();
 
@@ -159,6 +161,12 @@ router.use('/', kanbanRoutes);
 
 // Mount backlog routes
 router.use('/', backlogRoutes);
+
+// Mount requirements routes
+router.use('/', requirementsRoutes);
+
+// Mount risk routes
+router.use('/', riskRoutes);
 
 module.exports = router;
 
