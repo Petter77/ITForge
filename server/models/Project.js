@@ -6,7 +6,6 @@ class Project {
     try {
       await client.query('BEGIN');
 
-      // Create project
       const projectResult = await client.query(
         `INSERT INTO projects (name, description, owner_id)
          VALUES ($1, $2, $3)
@@ -16,7 +15,6 @@ class Project {
 
       const project = projectResult.rows[0];
 
-      // Add owner as project member with 'owner' role
       await client.query(
         `INSERT INTO project_members (project_id, user_id, role)
          VALUES ($1, $2, 'owner')
@@ -44,7 +42,7 @@ class Project {
 
   static async findByUserId(userId) {
     const result = await pool.query(
-      `SELECT DISTINCT 
+      `SELECT DISTINCT
         p.id,
         p.name,
         p.description,
@@ -73,9 +71,8 @@ class Project {
   }
 
   static async findById(projectId, userId) {
-    // Check if user has access to this project
     const result = await pool.query(
-      `SELECT 
+      `SELECT
         p.id,
         p.name,
         p.description,
@@ -108,14 +105,13 @@ class Project {
   }
 
   static async update(projectId, userId, { name, description }) {
-    // Check if user is owner or admin
     const project = await this.findById(projectId, userId);
     if (!project || (project.role !== 'owner' && project.role !== 'admin')) {
       throw new Error('Tylko właściciel lub administrator projektu może zaktualizować projekt');
     }
 
     const result = await pool.query(
-      `UPDATE projects 
+      `UPDATE projects
        SET name = $1, description = $2, updated_at = CURRENT_TIMESTAMP
        WHERE id = $3
        RETURNING id, name, description, owner_id, created_at, updated_at`,
@@ -126,13 +122,11 @@ class Project {
   }
 
   static async delete(projectId, userId) {
-    // Only the project owner (creator) can delete the project
     const project = await this.findById(projectId, userId);
     if (!project || project.role !== 'owner') {
       throw new Error('Tylko właściciel projektu może usunąć projekt');
     }
-    
-    // Double check that user is the actual project creator
+
     const projectData = await pool.query('SELECT owner_id FROM projects WHERE id = $1', [projectId]);
     if (projectData.rows.length === 0 || projectData.rows[0].owner_id !== userId) {
       throw new Error('Tylko właściciel projektu może usunąć projekt');

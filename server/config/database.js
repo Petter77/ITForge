@@ -9,7 +9,6 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-// Test connection
 pool.on('connect', () => {
   console.log('✅ Connected to PostgreSQL database');
 });
@@ -20,12 +19,11 @@ pool.on('error', (err) => {
   process.exit(-1);
 });
 
-// Initialize database tables
 const initializeDatabase = async () => {
   try {
     // Test connection first
     await pool.query('SELECT NOW()');
-    
+
     // Create users table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -39,12 +37,10 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create index on email for faster lookups
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)
     `);
 
-    // Create projects table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS projects (
         id SERIAL PRIMARY KEY,
@@ -56,7 +52,6 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create project_members table (for team members and roles)
     await pool.query(`
       CREATE TABLE IF NOT EXISTS project_members (
         id SERIAL PRIMARY KEY,
@@ -68,7 +63,6 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create indexes for better performance
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_projects_owner_id ON projects(owner_id)
     `);
@@ -81,7 +75,6 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_project_members_user_id ON project_members(user_id)
     `);
 
-    // Create project_invitations table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS project_invitations (
         id SERIAL PRIMARY KEY,
@@ -95,14 +88,12 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create partial unique index for pending invitations only
     await pool.query(`
-      CREATE UNIQUE INDEX IF NOT EXISTS idx_project_invitations_pending_unique 
-      ON project_invitations(project_id, user_id) 
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_project_invitations_pending_unique
+      ON project_invitations(project_id, user_id)
       WHERE status = 'pending'
     `);
 
-    // Create indexes for invitations
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_project_invitations_user_id ON project_invitations(user_id)
     `);
@@ -115,7 +106,6 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_project_invitations_status ON project_invitations(status)
     `);
 
-    // Create kanban_columns table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS kanban_columns (
         id SERIAL PRIMARY KEY,
@@ -127,7 +117,6 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create kanban_tasks table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS kanban_tasks (
         id SERIAL PRIMARY KEY,
@@ -143,7 +132,6 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create indexes for kanban tables
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_kanban_columns_project_id ON kanban_columns(project_id)
     `);
@@ -160,7 +148,6 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_kanban_tasks_assigned_to ON kanban_tasks(assigned_to)
     `);
 
-    // Create kanban_task_assignees table for multiple assignees
     await pool.query(`
       CREATE TABLE IF NOT EXISTS kanban_task_assignees (
         id SERIAL PRIMARY KEY,
@@ -171,7 +158,6 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create indexes for task assignees
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_kanban_task_assignees_task_id ON kanban_task_assignees(task_id)
     `);
@@ -180,7 +166,6 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_kanban_task_assignees_user_id ON kanban_task_assignees(user_id)
     `);
 
-    // Create notifications table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS notifications (
         id SERIAL PRIMARY KEY,
@@ -196,7 +181,6 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create indexes for notifications
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id)
     `);
@@ -213,7 +197,6 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON notifications(created_at DESC)
     `);
 
-    // Create requirements table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS requirements (
         id SERIAL PRIMARY KEY,
@@ -229,7 +212,6 @@ const initializeDatabase = async () => {
       )
     `);
 
-    // Create indexes for requirements
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_requirements_project_id ON requirements(project_id)
     `);
@@ -243,7 +225,6 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_requirements_priority ON requirements(priority)
     `);
 
-    // Create risk settings table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS risk_settings (
         id SERIAL PRIMARY KEY,

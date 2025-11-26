@@ -159,3 +159,46 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35) !important;
 }
 
+.bg-surface {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text);
+}
+
+.bg-surface-muted {
+  background-color: var(--color-surface-muted) !important;
+  color: var(--color-text);
+}
+
+.border-default {
+  border-color: var(--color-border) !important;
+}
+
+.text-primary {
+  color: var(--color-text);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.sidebar-tab {
+  background-color: transparent;
+  color: var(--color-text-muted);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-tab:hover {
+  color: var(--color-text);
+  background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+
+.sidebar-tab-active {
+  background-color: var(--jetbrains-blue);
+  color: #ffffff;
+}
+
+.sidebar-tab-active:hover {
+  background-color: var(--jetbrains-blue-hover);
+  color: #ffffff;
+}
+

@@ -138,12 +138,12 @@ const ProjectPage = () => {
   return (
     <div className="min-h-screen bg-white flex">
       {/* Sidebar Navigation */}
-      <div className="w-56 bg-gray-50 border-r border-gray-200 flex-shrink-0">
+      <div className="w-56 bg-surface border-r border-default flex-shrink-0">
         <div className="p-6">
           {/* Header */}
           <button
             onClick={() => navigate('/dashboard')}
-            className="text-sm text-gray-600 hover:text-gray-900 mb-6 flex items-center"
+            className="text-sm text-muted hover:text-primary mb-6 flex items-center"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -151,7 +151,7 @@ const ProjectPage = () => {
             Powrót do Panelu
           </button>
           <div className="mb-6">
-            <h1 className="text-xl font-bold text-black mb-3">{project.name}</h1>
+            <h1 className="text-xl font-bold text-primary mb-3">{project.name}</h1>
             <RoleBadge role={project.role} />
           </div>
 
@@ -162,12 +162,8 @@ const ProjectPage = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  w-full text-left py-3 px-4 rounded-lg font-medium text-sm transition-colors
-                  ${
-                    activeTab === tab.id
-                      ? 'bg-[#4E86D9] text-white'
-                      : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900'
-                  }
+                  w-full text-left py-3 px-4 rounded-lg font-medium text-sm
+                  ${activeTab === tab.id ? 'sidebar-tab-active' : 'sidebar-tab'}
                 `}
               >
                 <span className="mr-2">{tab.icon}</span>

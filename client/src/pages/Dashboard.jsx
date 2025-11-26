@@ -53,7 +53,7 @@ const Dashboard = () => {
         <div className="px-4 py-6 sm:px-0">
           {/* Header */}
           <div className="mb-8 flex items-center justify-between">
-            <h1 className="text-4xl font-bold text-black">
+            <h1 className="text-4xl font-bold text-primary">
               Witaj ponownie, {user?.firstName}!
             </h1>
             <button
