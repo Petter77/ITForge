@@ -7,6 +7,7 @@ const kanbanRoutes = require('./kanban');
 const backlogRoutes = require('./backlog');
 const requirementsRoutes = require('./requirements');
 const riskRoutes = require('./risks');
+const ganttRoutes = require('./gantt');
 
 const router = express.Router();
 
@@ -164,6 +165,9 @@ router.use('/', backlogRoutes);
 
 // Mount requirements routes
 router.use('/', requirementsRoutes);
+
+// Mount gantt routes
+router.use('/', ganttRoutes);
 
 // Mount risk routes
 router.use('/', riskRoutes);

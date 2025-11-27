@@ -9,6 +9,7 @@ import ProjectSettings from '../components/ProjectSettings';
 import RequirementsManagement from '../components/RequirementsManagement';
 import RiskManagement from '../components/RiskManagement';
 import RoleBadge from '../components/RoleBadge';
+import GanttView from '../components/GanttView';
 
 const ProjectPage = () => {
   const { id } = useParams();
@@ -75,17 +76,7 @@ const ProjectPage = () => {
       case 'kanban':
         return project?.id ? <KanbanBoard projectId={project.id} userRole={project.role} /> : null;
       case 'gantt':
-        return (
-          <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Wykres Gantta</h2>
-            <p className="text-gray-600">
-              Interaktywny wykres Gantta pokazujący harmonogram projektu, zależności i planowanie zadań zostanie wyświetlony tutaj.
-            </p>
-            <div className="mt-8 bg-gray-50 rounded-lg p-8 border border-gray-200">
-              <p className="text-center text-gray-500">Wykres Gantta - miejsce na zawartość</p>
-            </div>
-          </div>
-        );
+        return project?.id ? <GanttView projectId={project.id} userRole={project.role} /> : null;
       case 'backlog':
         return project?.id ? <BacklogAndSprints projectId={project.id} userRole={project.role} /> : null;
       case 'requirements':

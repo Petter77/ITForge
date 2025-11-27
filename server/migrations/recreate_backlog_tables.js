@@ -6,6 +6,7 @@ const recreateBacklogTables = async () => {
     await client.query('BEGIN');
 
     // Drop existing tables if they exist (child tables first)
+    await client.query('DROP TABLE IF EXISTS gantt_tasks CASCADE');
     await client.query('DROP TABLE IF EXISTS backlog_item_assignees CASCADE');
     await client.query('DROP TABLE IF EXISTS backlog_items CASCADE');
     await client.query('DROP TABLE IF EXISTS sprints CASCADE');
@@ -64,6 +65,27 @@ const recreateBacklogTables = async () => {
     await client.query('CREATE INDEX idx_backlog_items_position ON backlog_items(project_id, position)');
     await client.query('CREATE INDEX idx_backlog_item_assignees_item_id ON backlog_item_assignees(backlog_item_id)');
     await client.query('CREATE INDEX idx_backlog_item_assignees_user_id ON backlog_item_assignees(user_id)');
+
+    await client.query(`
+      CREATE TABLE gantt_tasks (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        start_date DATE NOT NULL,
+        end_date DATE NOT NULL,
+        progress INTEGER DEFAULT 0 CHECK (progress BETWEEN 0 AND 100),
+        status VARCHAR(50) DEFAULT 'planned' CHECK (status IN ('planned', 'in_progress', 'blocked', 'done')),
+        dependencies TEXT,
+        backlog_item_id INTEGER REFERENCES backlog_items(id) ON DELETE SET NULL,
+        created_by INTEGER NOT NULL REFERENCES users(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await client.query('CREATE INDEX idx_gantt_tasks_project_id ON gantt_tasks(project_id)');
+    await client.query('CREATE INDEX idx_gantt_tasks_status ON gantt_tasks(status)');
 
     await client.query('COMMIT');
     console.log('✅ Backlog tables recreated successfully');

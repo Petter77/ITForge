@@ -411,7 +411,7 @@ const KanbanBoard = ({ projectId, userRole }) => {
         onClose={() => setDeleteColumnConfirm({ isOpen: false, columnId: null, columnName: '' })}
         onConfirm={handleColumnDelete}
         title="Usuń kolumnę"
-        message={`Czy na pewno chcesz usunąć kolumnę "${deleteColumnConfirm.columnName}"? Tej akcji nie można cofnąć. Upewnij się, że kolumna nie zawiera zadań.`}
+        message={`Czy na pewno chcesz usunąć kolumnę "${deleteColumnConfirm.columnName}"? Tej operacji nie można cofnąć. Upewnij się, że kolumna nie zawiera zadań.`}
         confirmText="Usuń"
         cancelText="Anuluj"
         type="danger"
