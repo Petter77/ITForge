@@ -1,0 +1,167 @@
+Testy funkcjonalne zostały w pełni zdefiniowane na podstawie określonych w założeniach projektowych. Przetestowane zostały wszystkie z nich
+
+\begin{longtable}{|p{2cm}|p{6cm}|p{5cm}|p{2.5cm}|}
+
+\hline
+
+\textbf{ID Testu} & \textbf{Opis testu} & \textbf{Oczekiwany rezultat} & \textbf{Wynik} \\ \hline
+
+\endfirsthead
+
+
+
+\hline
+
+\textbf{ID Testu} & \textbf{Opis testu} & \textbf{Oczekiwany rezultat} & \textbf{Wynik} \\ \hline
+
+\endhead
+
+TF-1 & Test logowania użytkownika z poprawnymi danymi & Użytkownik zostaje zalogowany i przekierowany do panelu projektów & Pozytywny \\ \hline
+
+TF-2 & Test logowania użytkownika z nieprawidłowymi danymi & System wyświetla komunikat o błędzie logowania i pozostaje na stronie logowania & Pozytywny \\ \hline
+
+TF-3 & Test rejestracji użytkownika z poprawnymi danymi & Nowe konto użytkownika zostaje utworzone, użytkownik jest zalogowany i przekierowany do panelu projektów & Pozytywny \\ \hline
+
+TF-4 & Test rejestracji użytkownika z nieprawidłowymi danymi & System wyświetla komunikat o błędzie rejestracji i pozostaje na stronie rejestracji & Pozytywny \\ \hline
+
+TF-5 & Test rejestracji użytkownika z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na stronie rejestracji & Pozytywny \\ \hline
+
+TF-6 & Test przeglądania listy projektów użytkownika & System wyświetla listę wszystkich projektów, w których użytkownik uczestniczy & Pozytywny \\ \hline
+
+TF-7 & Test utworzenia projektu z poprawnymi danymi & Projekt zostaje utworzony, użytkownik zostaje przypisany jako właściciel i przekierowany do strony projektu & Pozytywny \\ \hline
+
+TF-8 & Test utworzenia projektu z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-9 & Test utworzenia projektu z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-10 & Test edycji projektu z poprawnymi danymi & Dane projektu zostają zaktualizowane w systemie & Pozytywny \\ \hline
+
+TF-12 & Test edycji projektu z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-13 & Test usunięcia projektu przez właściciela & Projekt zostaje usunięty z systemu, użytkownik zostaje przekierowany do panelu projektów & Pozytywny \\ \hline
+
+TF-14 & Test przeglądania powiadomień i zaproszeń & System wyświetla listę wszystkich powiadomień i zaproszeń użytkownika & Pozytywny \\ \hline
+
+TF-15 & Test zaproszenia użytkownika do projektu z poprawnymi danymi & Zaproszenie zostaje wysłane do wskazanego użytkownika & Pozytywny \\ \hline
+
+TF-16 & Test zaproszenia użytkownika z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-17 & Test zaproszenia użytkownika z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-18 & Test przyjęcia zaproszenia do projektu & Użytkownik zostaje dodany do projektu, zaproszenie zostaje usunięte, użytkownik zostaje przekierowany do strony projektu & Pozytywny \\ \hline
+
+TF-19 & Test odrzucenia zaproszenia do projektu & Zaproszenie zostaje usunięte, system wyświetla potwierdzenie odrzucenia & Pozytywny \\ \hline
+
+TF-20 & Test usunięcia użytkownika z projektu przez właściciela & Użytkownik zostaje usunięty z listy uczestników projektu & Pozytywny \\ \hline
+
+TF-21 & Test przeglądania tablicy Kanban & System wyświetla tablicę Kanban z kolumnami i zadaniami projektu & Pozytywny \\ \hline
+
+TF-22 & Test utworzenia zadania w tablicy Kanban z poprawnymi danymi & Zadanie zostaje utworzone w wybranej kolumnie tablicy Kanban & Pozytywny \\ \hline
+
+TF-23 & Test utworzenia zadania w tablicy Kanban z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-24 & Test utworzenia zadania w tablicy Kanban z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-25 & Test edycji zadania w tablicy Kanban z poprawnymi danymi & Dane zadania zostają zaktualizowane w tablicy Kanban & Pozytywny \\ \hline
+
+TF-26 & Test edycji zadania w tablicy Kanban z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-27 & Test edycji zadania w tablicy Kanban z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-28 & Test usunięcia zadania z tablicy Kanban & Zadanie zostaje usunięte z tablicy Kanban & Pozytywny \\ \hline
+
+TF-29 & Test utworzenia kolumny w tablicy Kanban z poprawnymi danymi & Kolumna zostaje utworzona w tablicy Kanban & Pozytywny \\ \hline
+
+TF-30 & Test utworzenia kolumny w tablicy Kanban z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-31 & Test utworzenia kolumny w tablicy Kanban z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-32 & Test edycji kolumny w tablicy Kanban z poprawnymi danymi & Dane kolumny zostają zaktualizowane w tablicy Kanban & Pozytywny \\ \hline
+
+TF-33 & Test edycji kolumny w tablicy Kanban z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-34 & Test edycji kolumny w tablicy Kanban z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-35 & Test usunięcia kolumny w tablicy Kanban & Kolumna zostaje usunięta z tablicy Kanban, zadania zostają przeniesione lub usunięte & Pozytywny \\ \hline
+
+TF-36 & Test przeglądania zadań na wykresie Gantta & System wyświetla wykres Gantta z zadaniami projektu & Pozytywny \\ \hline
+
+TF-37 & Test utworzenia zadania w wykresie Gantta z poprawnymi danymi & Zadanie zostaje utworzone i wyświetlone na wykresie Gantta & Pozytywny \\ \hline
+
+TF-38 & Test utworzenia zadania w wykresie Gantta z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-39 & Test utworzenia zadania w wykresie Gantta z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-40 & Test edycji zadania w wykresie Gantta z poprawnymi danymi & Dane zadania zostają zaktualizowane na wykresie Gantta & Pozytywny \\ \hline
+
+TF-41 & Test edycji zadania w wykresie Gantta z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-42 & Test edycji zadania w wykresie Gantta z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-43 & Test usunięcia zadania z wykresu Gantta & Zadanie zostaje usunięte z wykresu Gantta & Pozytywny \\ \hline
+
+TF-44 & Test przeglądania listy wymagań & System wyświetla listę wszystkich wymagań projektu & Pozytywny \\ \hline
+
+TF-45 & Test utworzenia nowego wymagania z poprawnymi danymi & Wymaganie zostaje utworzone i dodane do listy wymagań projektu & Pozytywny \\ \hline
+
+TF-46 & Test utworzenia nowego wymagania z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-47 & Test utworzenia nowego wymagania z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-48 & Test edycji wymagania z poprawnymi danymi & Dane wymagania zostają zaktualizowane w systemie & Pozytywny \\ \hline
+
+TF-49 & Test edycji wymagania z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-50 & Test edycji wymagania z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-51 & Test usunięcia wymagania & Wymaganie zostaje usunięte z projektu & Pozytywny \\ \hline
+
+TF-52 & Test przeglądania szczegółów sprintu & System wyświetla szczegółowe informacje o sprincie & Pozytywny \\ \hline
+
+TF-53 & Test edycji sprintu z poprawnymi danymi & Dane sprintu zostają zaktualizowane w systemie & Pozytywny \\ \hline
+
+TF-54 & Test edycji sprintu z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-55 & Test edycji sprintu z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-56 & Test usunięcia sprintu przez właściciela projektu & Sprint zostaje usunięty z projektu & Pozytywny \\ \hline
+
+TF-57 & Test przeglądania elementów backlogu & System wyświetla listę wszystkich elementów backlogu & Pozytywny \\ \hline
+
+TF-58 & Test edycji elementu backlogu z poprawnymi danymi & Dane elementu backlogu zostają zaktualizowane w systemie & Pozytywny \\ \hline
+
+TF-59 & Test edycji elementu backlogu z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-60 & Test edycji elementu backlogu z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-61 & Test utworzenia elementu backlogu z poprawnymi danymi & Element backlogu zostaje utworzony i dodany do backlogu & Pozytywny \\ \hline
+
+TF-62 & Test utworzenia elementu backlogu z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-63 & Test utworzenia elementu backlogu z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-64 & Test usunięcia elementu backlogu & Element backlogu zostaje usunięty z backlogu & Pozytywny \\ \hline
+
+TF-65 & Test przeglądania listy ryzyk & System wyświetla listę wszystkich ryzyk projektu & Pozytywny \\ \hline
+
+TF-66 & Test utworzenia ryzyka z poprawnymi danymi & Ryzyko zostaje utworzone i dodane do listy ryzyk projektu & Pozytywny \\ \hline
+
+TF-67 & Test utworzenia ryzyka z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-68 & Test utworzenia ryzyka z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-69 & Test edycji ryzyka z poprawnymi danymi & Dane ryzyka zostają zaktualizowane w systemie & Pozytywny \\ \hline
+
+TF-70 & Test edycji ryzyka z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-71 & Test edycji ryzyka z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-72 & Test usunięcia ryzyka & Ryzyko zostaje usunięte z projektu & Pozytywny \\ \hline
+
+TF-73 & Test edycji macierzy ryzyka z poprawnymi danymi & Macierz ryzyka zostaje zaktualizowana w systemie & Pozytywny \\ \hline
+
+TF-74 & Test edycji macierzy ryzyka z nieprawidłowymi danymi & System wyświetla komunikaty o błędach walidacji i pozostaje na formularzu & Pozytywny \\ \hline
+
+TF-75 & Test edycji macierzy ryzyka z brakującymi obowiązkowymi polami & System wyświetla komunikaty informujące, że pola są wymagane i pozostaje na formularzu & Pozytywny \\ \hline
+
+\end{longtable}

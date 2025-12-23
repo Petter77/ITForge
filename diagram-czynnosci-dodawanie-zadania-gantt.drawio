@@ -1,0 +1,344 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="5.0" version="21.0.0" etag="diagram" type="device">
+  <diagram name="Dodawanie zadania Gantt" id="gantt-task-activity">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Start node -->
+        <mxCell id="start" value="Start" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="600" y="40" width="80" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Initial action -->
+        <mxCell id="action1" value="Użytkownik wypełnia formularz&#xa;dodawania zadania Gantt" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="120" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Can edit? -->
+        <mxCell id="decision1" value="Użytkownik ma&#xa;uprawnienia do edycji?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="580" y="220" width="160" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Submit form -->
+        <mxCell id="action2" value="Kliknięcie przycisku&#xa;&quot;Zapisz&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="340" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Required fields filled? -->
+        <mxCell id="decision2" value="Wszystkie wymagane pola&#xa;wypełnione?&#xa;(title, startDate, endDate)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="440" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Error: Missing fields -->
+        <mxCell id="error1" value="Wyświetl błąd:&#xa;&quot;Uzupełnij wymagane pola&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="840" y="450" width="180" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Dependencies valid? -->
+        <mxCell id="decision3" value="Zależności podane?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="580" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Validate dependencies -->
+        <mxCell id="action3" value="Walidacja zależności:&#xa;- Sprawdź czy ID istnieją&#xa;- Sprawdź czy nie są to ID&#xa;  bieżącego zadania" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="700" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Dependencies valid? -->
+        <mxCell id="decision4" value="Zależności&#xa;prawidłowe?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="840" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Error: Invalid dependencies -->
+        <mxCell id="error2" value="Wyświetl błąd:&#xa;&quot;Nieprawidłowe ID zadań&#xa;w zależnościach&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="840" y="840" width="180" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Prepare payload -->
+        <mxCell id="action4" value="Przygotuj payload:&#xa;{title, description, startDate,&#xa;endDate, progress, status,&#xa;dependencies, backlogItemId}" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="960" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Send POST request -->
+        <mxCell id="action5" value="POST /api/projects/:id/gantt/tasks" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1100" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Project access? -->
+        <mxCell id="decision5" value="Użytkownik ma dostęp&#xa;do projektu?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1200" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Error: No access -->
+        <mxCell id="error3" value="404 Not Found&#xa;&quot;Projekt nie został&#xa;znaleziony lub dostęp zabroniony&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="840" y="1200" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Server validation -->
+        <mxCell id="action6" value="Walidacja po stronie serwera:&#xa;- title (wymagany, max 255 znaków)&#xa;- startDate (wymagany, ISO8601)&#xa;- endDate (wymagany, ISO8601)&#xa;- progress (0-100)&#xa;- status (planned/in_progress/blocked/done)&#xa;- dependencies (string)&#xa;- backlogItemId (integer)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1320" width="200" height="140" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Validation passed? -->
+        <mxCell id="decision6" value="Walidacja&#xa;przeszła?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1500" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Error: Validation failed -->
+        <mxCell id="error4" value="400 Bad Request&#xa;{errors: [...]}" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="840" y="1500" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Dates valid? -->
+        <mxCell id="decision7" value="startDate &lt; endDate?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1620" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Error: Invalid dates -->
+        <mxCell id="error5" value="400 Bad Request&#xa;&quot;Data zakończenia musi być&#xa;późniejsza niż data rozpoczęcia&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="840" y="1620" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: BacklogItemId provided? -->
+        <mxCell id="decision8" value="backlogItemId&#xa;podane?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1740" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Check backlog item -->
+        <mxCell id="action7" value="Sprawdź czy BacklogItem&#xa;istnieje i należy do projektu" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1860" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: BacklogItem exists? -->
+        <mxCell id="decision9" value="BacklogItem&#xa;istnieje?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="1980" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Error: BacklogItem not found -->
+        <mxCell id="error6" value="404 Not Found&#xa;&quot;Element backlogu nie został&#xa;znaleziony&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="840" y="1980" width="200" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Create task in DB -->
+        <mxCell id="action8" value="GanttTask.create():&#xa;INSERT INTO gantt_tasks&#xa;(project_id, title, description,&#xa;start_date, end_date, progress,&#xa;status, dependencies,&#xa;backlog_item_id, created_by)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1740" width="280" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Decision: Create successful? -->
+        <mxCell id="decision10" value="Utworzenie&#xa;zadania&#xa;udane?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="220" y="1900" width="240" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Error: Server error -->
+        <mxCell id="error7" value="500 Internal Server Error&#xa;&quot;Błąd serwera&quot;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1900" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Return success -->
+        <mxCell id="action9" value="201 Created&#xa;{message, task}" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="220" y="2020" width="240" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Refresh Gantt chart -->
+        <mxCell id="action10" value="fetchTasks() - odświeżenie&#xa;wykresu Gantta" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="2020" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Action: Reset form -->
+        <mxCell id="action11" value="Reset formularza" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="2120" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- End node -->
+        <mxCell id="end" value="Koniec" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="600" y="2220" width="80" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Error end nodes -->
+        <mxCell id="error_end1" value="Koniec (błąd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="880" y="570" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="error_end2" value="Koniec (błąd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="880" y="960" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="error_end3" value="Koniec (błąd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1220" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="error_end4" value="Koniec (błąd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1520" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="error_end5" value="Koniec (błąd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1640" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="error_end6" value="Koniec (błąd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="2100" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="error_end7" value="Koniec (błąd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="80" y="2000" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Edges - Main flow -->
+        <mxCell id="edge1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="start" target="action1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action1" target="decision1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="decision1" target="error_end1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="500" y="260" as="sourcePoint" />
+            <mxPoint x="880" y="590" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="260" />
+              <mxPoint x="500" y="590" />
+              <mxPoint x="880" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision1" target="action2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action2" target="decision2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision2" target="error1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge7" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision2" target="decision3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="error1" target="error_end1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge9" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision3" target="action3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge10" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision3" target="action4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="500" y="620" as="sourcePoint" />
+            <mxPoint x="500" y="1010" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="620" />
+              <mxPoint x="500" y="1010" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action3" target="decision4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge12" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision4" target="error2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge13" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision4" target="action4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="920" as="sourcePoint" />
+            <mxPoint x="560" y="960" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="error2" target="error_end2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action4" target="action5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action5" target="decision5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge17" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision5" target="error3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge18" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision5" target="action6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="error3" target="error_end3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action6" target="decision6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge21" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision6" target="error4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge22" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision6" target="decision7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="error4" target="error_end4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge24" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision7" target="error5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge25" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision7" target="decision8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="error5" target="error_end5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge27" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision8" target="action7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge28" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision8" target="action8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="500" y="1780" as="sourcePoint" />
+            <mxPoint x="340" y="1800" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="1780" />
+              <mxPoint x="340" y="1780" />
+              <mxPoint x="340" y="1800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action7" target="decision9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge30" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision9" target="error6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge31" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision9" target="action8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="2060" as="sourcePoint" />
+            <mxPoint x="340" y="1860" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="340" y="2060" />
+              <mxPoint x="340" y="1860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="error6" target="error_end6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action8" target="decision10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge34" value="Nie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision10" target="error7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge35" value="Tak" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="decision10" target="action9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="error7" target="error_end7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action9" target="action10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="2080" as="sourcePoint" />
+            <mxPoint x="560" y="2050" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="560" y="2080" />
+              <mxPoint x="560" y="2050" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge38" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action10" target="action11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="action11" target="end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+

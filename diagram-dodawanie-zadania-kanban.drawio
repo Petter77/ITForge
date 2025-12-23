@@ -1,0 +1,311 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="5.0" version="21.0.0" etag="diagram" type="device">
+  <diagram name="Dodawanie zadania Kanban" id="kanban-task-creation">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Participants -->
+        <mxCell id="user" value="Użytkownik" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="120" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="kanbanBoard" value="KanbanBoard" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="200" y="40" width="140" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="taskModal" value="TaskModal" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="140" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="api" value="api.js" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="40" width="120" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="router" value="/api/projects/:id/kanban/tasks" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="720" y="40" width="200" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="projectModel" value="Project Model" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="960" y="40" width="140" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="kanbanColumnModel" value="KanbanColumn Model" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="40" width="180" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="kanbanTaskModel" value="KanbanTask Model" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="40" width="160" height="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="PostgreSQL" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="40" width="140" height="1000" as="geometry" />
+        </mxCell>
+        
+        <!-- Main flow -->
+        <mxCell id="msg1" value="Klik &quot;Dodaj zadanie&quot;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="user" target="kanbanBoard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg2" value="handleAddTask(columnId)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanBoard" target="taskModal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg3" value="Wypełnia formularz i klika &quot;Zapisz&quot;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="user" target="taskModal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg4" value="POST /api/projects/:id/kanban/tasks&#xa;{title, description, columnId, assignedTo}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="taskModal" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg5" value="POST /api/projects/:id/kanban/tasks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="api" target="router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg6" value="checkProjectAccess()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="projectModel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg7" value="findById(projectId, userId)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="projectModel" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg8" value="Project data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="db" target="projectModel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg9" value="Project" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="projectModel" target="router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg10" value="Walidacja danych&#xa;(express-validator)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="240" as="sourcePoint" />
+            <mxPoint x="820" y="280" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="240" />
+              <mxPoint x="900" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg11" value="findById(columnId, projectId)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="kanbanColumnModel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg12" value="SELECT * FROM kanban_columns&#xa;WHERE id = ? AND project_id = ?" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanColumnModel" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg13" value="Column data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="db" target="kanbanColumnModel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg14" value="Column" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="kanbanColumnModel" target="router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg15" value="validateAssignedUsers(projectId, assignedTo)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="400" as="sourcePoint" />
+            <mxPoint x="820" y="440" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="400" />
+              <mxPoint x="900" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg16" value="create({columnId, projectId, title, description, position, assignedTo, createdBy})" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="kanbanTaskModel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg17" value="BEGIN TRANSACTION" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanTaskModel" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg18" value="INSERT INTO kanban_tasks&#xa;(column_id, project_id, title, description, position, created_by)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanTaskModel" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg19" value="taskId" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="db" target="kanbanTaskModel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg20" value="[if assignedTo]&#xa;INSERT INTO kanban_task_assignees" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanTaskModel" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg21" value="COMMIT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanTaskModel" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg22" value="findById(taskId, projectId)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanTaskModel" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg23" value="Task data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="db" target="kanbanTaskModel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg24" value="Task" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="kanbanTaskModel" target="router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg25" value="[if assignedTo]&#xa;createTaskAssignmentNotifications()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="600" as="sourcePoint" />
+            <mxPoint x="820" y="640" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="600" />
+              <mxPoint x="900" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg26" value="201 Created&#xa;{message, task}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="router" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg27" value="201 Created" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="api" target="taskModal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg28" value="onSave()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="taskModal" target="kanbanBoard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg29" value="fetchKanbanData()" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanBoard" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="msg30" value="Wyświetla zaktualizowaną tablicę" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanBoard" target="user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Alternative flow 1: Validation error -->
+        <mxCell id="alt1_start" value="alt" style="swimlane;startSize=40;swimlaneLine=1;swimlaneFillColor=#e1d5e7;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;align=center;html=1;whiteSpace=wrap;rounded=0;shadow=0;comic=0;labelPosition=center;verticalAlign=top;spacingLeft=0;spacingRight=0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="300" width="800" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="alt1_label" value="[Błąd walidacji - brakujące/nieprawidłowe dane]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="alt1_start">
+          <mxGeometry y="20" width="800" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="alt1_msg1" value="400 Bad Request&#xa;{errors: [...]}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="router" target="api">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="340" as="sourcePoint" />
+            <mxPoint x="640" y="340" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="640" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt1_msg2" value="400 Bad Request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="api" target="taskModal">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="340" as="sourcePoint" />
+            <mxPoint x="450" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt1_msg3" value="Wyświetla błąd walidacji" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="taskModal" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="340" as="sourcePoint" />
+            <mxPoint x="100" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Alternative flow 2: No project access -->
+        <mxCell id="alt2_start" value="alt" style="swimlane;startSize=40;swimlaneLine=1;swimlaneFillColor=#e1d5e7;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;align=center;html=1;whiteSpace=wrap;rounded=0;shadow=0;comic=0;labelPosition=center;verticalAlign=top;spacingLeft=0;spacingRight=0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="960" y="150" width="600" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="alt2_label" value="[Brak dostępu do projektu]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="alt2_start">
+          <mxGeometry y="20" width="600" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="alt2_msg1" value="404 Not Found&#xa;{message: 'Projekt nie został znaleziony...'}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="projectModel" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1030" y="190" as="sourcePoint" />
+            <mxPoint x="820" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt2_msg2" value="404 Not Found" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="router" target="api">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="190" as="sourcePoint" />
+            <mxPoint x="640" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt2_msg3" value="404 Not Found" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="api" target="taskModal">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="190" as="sourcePoint" />
+            <mxPoint x="450" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt2_msg4" value="Wyświetla błąd dostępu" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="taskModal" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="190" as="sourcePoint" />
+            <mxPoint x="100" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Alternative flow 3: Column not found -->
+        <mxCell id="alt3_start" value="alt" style="swimlane;startSize=40;swimlaneLine=1;swimlaneFillColor=#e1d5e7;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;align=center;html=1;whiteSpace=wrap;rounded=0;shadow=0;comic=0;labelPosition=center;verticalAlign=top;spacingLeft=0;spacingRight=0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="320" width="560" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="alt3_label" value="[Kolumna nie istnieje lub nie należy do projektu]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="alt3_start">
+          <mxGeometry y="20" width="560" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="alt3_msg1" value="null" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="kanbanColumnModel" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1230" y="360" as="sourcePoint" />
+            <mxPoint x="920" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt3_msg2" value="404 Not Found&#xa;{message: 'Kolumna nie została znaleziona'}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="router" target="api">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="360" as="sourcePoint" />
+            <mxPoint x="640" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt3_msg3" value="404 Not Found" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="api" target="taskModal">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="360" as="sourcePoint" />
+            <mxPoint x="450" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt3_msg4" value="Wyświetla błąd kolumny" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="taskModal" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="360" as="sourcePoint" />
+            <mxPoint x="100" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Alternative flow 4: Assigned users are observers -->
+        <mxCell id="alt4_start" value="alt" style="swimlane;startSize=40;swimlaneLine=1;swimlaneFillColor=#e1d5e7;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;align=center;html=1;whiteSpace=wrap;rounded=0;shadow=0;comic=0;labelPosition=center;verticalAlign=top;spacingLeft=0;spacingRight=0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="460" width="800" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="alt4_label" value="[Przypisani użytkownicy są obserwatorami]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="alt4_start">
+          <mxGeometry y="20" width="800" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="alt4_msg1" value="400 Bad Request&#xa;{message: 'Nie można przypisać zadań do obserwatorów...'}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="router" target="api">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="500" as="sourcePoint" />
+            <mxPoint x="640" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt4_msg2" value="400 Bad Request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="api" target="taskModal">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="500" as="sourcePoint" />
+            <mxPoint x="450" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt4_msg3" value="Wyświetla błąd przypisania" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="taskModal" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="500" as="sourcePoint" />
+            <mxPoint x="100" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Alternative flow 5: Server error -->
+        <mxCell id="alt5_start" value="alt" style="swimlane;startSize=40;swimlaneLine=1;swimlaneFillColor=#e1d5e7;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;align=center;html=1;whiteSpace=wrap;rounded=0;shadow=0;comic=0;labelPosition=center;verticalAlign=top;spacingLeft=0;spacingRight=0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="520" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="alt5_label" value="[Błąd serwera podczas tworzenia zadania]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="alt5_start">
+          <mxGeometry y="20" width="340" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="alt5_msg1" value="ROLLBACK" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="kanbanTaskModel" target="db">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1440" y="560" as="sourcePoint" />
+            <mxPoint x="1630" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt5_msg2" value="Error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="kanbanTaskModel" target="router">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1440" y="560" as="sourcePoint" />
+            <mxPoint x="920" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt5_msg3" value="500 Internal Server Error&#xa;{message: 'Błąd serwera', error}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="router" target="api">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="560" as="sourcePoint" />
+            <mxPoint x="640" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt5_msg4" value="500 Internal Server Error" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="api" target="taskModal">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="560" as="sourcePoint" />
+            <mxPoint x="450" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="alt5_msg5" value="Wyświetla błąd serwera" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="taskModal" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="560" as="sourcePoint" />
+            <mxPoint x="100" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+

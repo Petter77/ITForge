@@ -1,0 +1,1879 @@
+\subsection*{PU: [UC-2] Rejestracja}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik niezalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Utworzenie nowego konta użytkownika w systemie
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item System ma połączenie z bazą danych
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę rejestracji
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz rejestracji
+    \item Użytkownik wypełnia formularz danymi
+    \item Użytkownik zatwierdza dane
+    \item System tworzy nowe konto użytkownika
+    \item System przekierowuje użytkownika do panelu projektów
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik jest zarejestrowany i zalogowany do systemu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{4a: Błąd rejestracji}
+\begin{enumerate}
+    \item System wyświetla komunikat o błędzie rejestracji
+    \item System pozostaje na stronie rejestracji
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-3] Przeglądanie projektów użytkownika}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie listy projektów, w których użytkownik uczestniczy
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę główną lub panel projektów
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera listę projektów użytkownika
+    \item System wyświetla listę projektów
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi listę swoich projektów
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-4] Utworzenie projektu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Utworzenie nowego projektu w systemie
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk utworzenia projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz tworzenia projektu
+    \item Użytkownik wypełnia dane projektu
+    \item Użytkownik zatwierdza formularz
+    \item System tworzy projekt i przypisuje użytkownika jako właściciela
+    \item System przekierowuje użytkownika do strony projektu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Projekt został utworzony w systemie
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez zapisywania danych
+\end{enumerate}
+
+\textbf{3a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza dane formularza
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-5] Edycja projektu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych istniejącego projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane projektu
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje dane projektu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Dane projektu zostały zaktualizowane
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-6] Usunięcie projektu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie projektu z systemu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa projekt i powiązane dane
+    \item System przekierowuje użytkownika do panelu projektów
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Projekt został usunięty z systemu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania projektu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-7] Przeglądanie powiadomień i zaproszeń}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie listy powiadomień i zaproszeń użytkownika
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę powiadomień
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera powiadomienia i zaproszenia użytkownika
+    \item System wyświetla listę powiadomień i zaproszeń
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi swoje powiadomienia i zaproszenia
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-8] Zaproszenie użytkownika do projektu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wysłanie zaproszenia użytkownikowi do udziału w projekcie
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk zaproszenia użytkownika
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz zaproszenia
+    \item Użytkownik wprowadza email lub nazwę użytkownika
+    \item Użytkownik zatwierdza zaproszenie
+    \item System wysyła zaproszenie do wskazanego użytkownika
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zaproszenie zostało wysłane
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez wysyłania zaproszenia
+\end{enumerate}
+
+\textbf{3a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza wprowadzone dane
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-9] Przyjęcie zaproszenia do projektu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Dołączenie do projektu poprzez przyjęcie zaproszenia
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma aktywne zaproszenie do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk przyjęcia zaproszenia
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System dodaje użytkownika do projektu
+    \item System usuwa zaproszenie
+    \item System przekierowuje użytkownika do strony projektu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik został dodany do projektu
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-10] Odrzucenie zaproszenia do projektu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Odrzucenie zaproszenia do projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma aktywne zaproszenie do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk odrzucenia zaproszenia
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System usuwa zaproszenie
+    \item System wyświetla potwierdzenie odrzucenia
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zaproszenie zostało odrzucone
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-11] Usunięcie użytkownika z projektu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie użytkownika z listy uczestników projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia użytkownika z projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa użytkownika z projektu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik został usunięty z projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania użytkownika
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-12] Przeglądanie tablicy Kanban}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie tablicy Kanban z zadaniami projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę tablicy Kanban projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera dane tablicy Kanban
+    \item System wyświetla kolumny i zadania
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi tablicę Kanban
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-13] Utworzenie zadania w tablicy Kanban}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Dodanie nowego zadania do tablicy Kanban
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk utworzenia zadania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz tworzenia zadania
+    \item Użytkownik wypełnia dane zadania
+    \item Użytkownik wybiera kolumnę
+    \item Użytkownik zatwierdza formularz
+    \item System tworzy zadanie w wybranej kolumnie
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zadanie zostało utworzone w tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez zapisywania danych
+\end{enumerate}
+
+\textbf{4a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza dane formularza
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-14] Edycja zadania w tablicy Kanban}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych zadania w tablicy Kanban
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Zadanie istnieje w tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji zadania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane zadania
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje zadanie
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zadanie zostało zaktualizowane
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-15] Usunięcie zadania z tablicy Kanban}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie zadania z tablicy Kanban
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Zadanie istnieje w tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia zadania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa zadanie
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zadanie zostało usunięte z tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania zadania
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-16] Utworzenie kolumny w tablicy Kanban}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Dodanie nowej kolumny do tablicy Kanban
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk utworzenia kolumny
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz tworzenia kolumny
+    \item Użytkownik wprowadza nazwę kolumny
+    \item Użytkownik zatwierdza formularz
+    \item System tworzy kolumnę w tablicy Kanban
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Kolumna została utworzona w tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez zapisywania danych
+\end{enumerate}
+
+\textbf{3a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza dane formularza
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-17] Edycja kolumny w tablicy Kanban}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych kolumny w tablicy Kanban
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+    \item Kolumna istnieje w tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji kolumny
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane kolumny
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje kolumnę
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Kolumna została zaktualizowana
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-18] Usunięcie kolumny w tablicy Kanban}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie kolumny z tablicy Kanban
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+    \item Kolumna istnieje w tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia kolumny
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa kolumnę i przenosi zadania do innej kolumny lub usuwa je
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Kolumna została usunięta z tablicy Kanban
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania kolumny
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-19] Przeglądanie zadań na wykresie Gantta}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie zadań projektu na wykresie Gantta
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę wykresu Gantta projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera dane zadań projektu
+    \item System wyświetla wykres Gantta z zadaniami
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi wykres Gantta z zadaniami
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-20] Utworzenie zadania w wykresie Gantta}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Dodanie nowego zadania do wykresu Gantta
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk utworzenia zadania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz tworzenia zadania
+    \item Użytkownik wypełnia dane zadania (nazwa, data rozpoczęcia, data zakończenia)
+    \item Użytkownik zatwierdza formularz
+    \item System tworzy zadanie i wyświetla je na wykresie Gantta
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zadanie zostało utworzone i wyświetlone na wykresie Gantta
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez zapisywania danych
+\end{enumerate}
+
+\textbf{3a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza dane formularza
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-21] Edycja zadania w wykresie Gantta}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych zadania w wykresie Gantta
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Zadanie istnieje w wykresie Gantta
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji zadania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane zadania
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje zadanie na wykresie Gantta
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zadanie zostało zaktualizowane na wykresie Gantta
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-22] Usunięcie zadania z wykresu Gantta}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie zadania z wykresu Gantta
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Zadanie istnieje w wykresie Gantta
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia zadania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa zadanie z wykresu Gantta
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Zadanie zostało usunięte z wykresu Gantta
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania zadania
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-23] Przeglądanie listy wymagań}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie listy wymagań projektowych
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę wymagań projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera listę wymagań projektu
+    \item System wyświetla listę wymagań
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi listę wymagań projektu
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-24] Utworzenie nowego wymagania}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Dodanie nowego wymagania do projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk utworzenia wymagania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz tworzenia wymagania
+    \item Użytkownik wypełnia dane wymagania
+    \item Użytkownik zatwierdza formularz
+    \item System tworzy wymaganie
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Wymaganie zostało utworzone
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez zapisywania danych
+\end{enumerate}
+
+\textbf{3a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza dane formularza
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-25] Edycja wymagania}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych wymagania projektowego
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Wymaganie istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji wymagania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane wymagania
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje wymaganie
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Wymaganie zostało zaktualizowane
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-26] Usunięcie wymagania}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie wymagania z projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Wymaganie istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia wymagania
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa wymaganie
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Wymaganie zostało usunięte
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania wymagania
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-27] Przeglądanie szczegółów sprintu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie szczegółowych informacji o sprincie
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Sprint istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika na sprint w liście sprintów
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera dane sprintu
+    \item System wyświetla szczegóły sprintu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi szczegóły sprintu
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-28] Edycja sprintu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych sprintu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+    \item Sprint istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji sprintu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane sprintu
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje sprint
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Sprint został zaktualizowany
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-29] Usunięcie sprintu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie sprintu z projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+    \item Sprint istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia sprintu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa sprint
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Sprint został usunięty
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania sprintu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-30] Przeglądanie elementów backlogu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie listy elementów backlogu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę backlogu projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera elementy backlogu
+    \item System wyświetla listę elementów backlogu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi listę elementów backlogu
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-31] Edycja elementu backlogu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych elementu backlogu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Element backlogu istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji elementu backlogu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane elementu
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje element backlogu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Element backlogu został zaktualizowany
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-32] Utworzenie elementu backlogu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Dodanie nowego elementu do backlogu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk utworzenia elementu backlogu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz tworzenia elementu
+    \item Użytkownik wypełnia dane elementu
+    \item Użytkownik zatwierdza formularz
+    \item System tworzy element backlogu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Element backlogu został utworzony
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez zapisywania danych
+\end{enumerate}
+
+\textbf{3a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza dane formularza
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-33] Usunięcie elementu backlogu}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie elementu z backlogu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Element backlogu istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia elementu backlogu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa element backlogu
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Element backlogu został usunięty
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania elementu backlogu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-34] Przeglądanie listy ryzyk}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Wyświetlenie listy ryzyk projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik wchodzi na stronę zarządzania ryzykiem projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System pobiera listę ryzyk projektu
+    \item System wyświetla listę ryzyk
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Użytkownik widzi listę ryzyk projektu
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-35] Utworzenie ryzyka}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Dodanie nowego ryzyka do projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk utworzenia ryzyka
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz tworzenia ryzyka
+    \item Użytkownik wypełnia dane ryzyka
+    \item Użytkownik zatwierdza formularz
+    \item System tworzy ryzyko
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Ryzyko zostało utworzone
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka formularz bez zapisywania danych
+\end{enumerate}
+
+\textbf{3a: Błąd walidacji}
+\begin{enumerate}
+    \item System sprawdza dane formularza
+    \item System wykrywa brakujące obowiązkowe pola lub nieprawidłowe dane
+    \item System wyświetla komunikaty o błędach
+    \item System pozostaje na formularzu
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-36] Edycja ryzyka}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja danych ryzyka
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Ryzyko istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji ryzyka
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji z aktualnymi danymi
+    \item Użytkownik modyfikuje dane ryzyka
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje ryzyko
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Ryzyko zostało zaktualizowane
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-37] Usunięcie ryzyka}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Użytkownik zalogowany
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Usunięcie ryzyka z projektu
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik ma dostęp do projektu
+    \item Ryzyko istnieje
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk usunięcia ryzyka
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla potwierdzenie usunięcia
+    \item Użytkownik potwierdza usunięcie
+    \item System usuwa ryzyko
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Ryzyko zostało usunięte
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływy Alternatywne}
+
+\textbf{2a: Rezygnacja użytkownika}
+\begin{enumerate}
+    \item Użytkownik klika przycisk anulowania
+    \item System zamyka dialog potwierdzenia bez usuwania ryzyka
+\end{enumerate}
+
+
+\hrule
+\vspace{1cm}
+
+\subsection*{PU: [UC-38] Edycja macierzy ryzyka}
+
+\noindent\textbf{Aktorzy}
+\begin{itemize}
+    \item Właściciel projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Cel}
+\begin{quote}
+    Modyfikacja ustawień macierzy ryzyka
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Wstępne}
+\begin{itemize}
+    \item Użytkownik jest zalogowany
+    \item Użytkownik jest właścicielem projektu
+\end{itemize}
+
+\vspace{0.2cm}
+\noindent\textbf{Wywołanie}
+\begin{quote}
+    Użytkownik klika przycisk edycji macierzy ryzyka
+\end{quote}
+
+\vspace{0.2cm}
+\noindent\textbf{Przepływ Główny}
+\begin{enumerate}
+    \item System wyświetla formularz edycji macierzy ryzyka
+    \item Użytkownik modyfikuje ustawienia macierzy
+    \item Użytkownik zatwierdza zmiany
+    \item System aktualizuje macierz ryzyka
+\end{enumerate}
+
+\vspace{0.2cm}
+\noindent\textbf{Warunki Końcowe}
+\begin{itemize}
+    \item Macierz ryzyka została zaktualizowana
+\end{itemize}
+
+
+\hrule
+\vspace{1cm}
+\newpage
+

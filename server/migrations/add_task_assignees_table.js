@@ -36,18 +36,8 @@ const addTaskAssigneesTable = async () => {
       CREATE INDEX IF NOT EXISTS idx_kanban_task_assignees_user_id ON kanban_task_assignees(user_id)
     `);
 
-    // Migrate existing assigned_to data to new table
-    console.log('📦 Migrating existing assigned_to data...');
-    await client.query(`
-      INSERT INTO kanban_task_assignees (task_id, user_id)
-      SELECT id, assigned_to
-      FROM kanban_tasks
-      WHERE assigned_to IS NOT NULL
-      ON CONFLICT (task_id, user_id) DO NOTHING
-    `);
-
-    // Note: We'll keep the assigned_to column for now for backward compatibility
-    // It can be removed in a future migration if needed
+    // Note: assigned_to column has been removed from kanban_tasks table
+    // Migration of existing data is no longer needed
 
     await client.query('COMMIT');
     console.log('✅ Migration completed successfully');

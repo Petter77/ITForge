@@ -39,7 +39,6 @@ const createKanbanTables = async () => {
         title VARCHAR(255) NOT NULL,
         description TEXT,
         position INTEGER NOT NULL DEFAULT 0,
-        assigned_to INTEGER REFERENCES users(id) ON DELETE SET NULL,
         created_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -58,10 +57,6 @@ const createKanbanTables = async () => {
 
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_kanban_tasks_project_id ON kanban_tasks(project_id)
-    `);
-
-    await client.query(`
-      CREATE INDEX IF NOT EXISTS idx_kanban_tasks_assigned_to ON kanban_tasks(assigned_to)
     `);
 
     await client.query('COMMIT');

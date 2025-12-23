@@ -43,7 +43,6 @@ const ProjectPage = () => {
     { id: 'requirements', name: 'Wymagania'},
     { id: 'risks', name: 'Ryzyka'},
     { id: 'team', name: 'Zespół'},
-    { id: 'reports', name: 'Raporty'},
     { id: 'settings', name: 'Ustawienia'},
   ];
 
@@ -85,33 +84,6 @@ const ProjectPage = () => {
         return project?.id ? <RiskManagement projectId={project.id} userRole={project.role} /> : null;
       case 'team':
         return <TeamManagement projectId={project.id} userRole={project.role} />;
-      case 'reports':
-        return (
-          <div className="bg-white rounded-lg border border-gray-200 p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Raporty i Analizy</h2>
-            <p className="text-gray-600 mb-6">
-              Przeglądaj postęp projektu, obciążenie zespołu i szczegółowe analizy.
-            </p>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Postęp Projektu</h3>
-                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Obciążenie Zespołu</h3>
-                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Wykres Burn-down</h3>
-                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-2">Prędkość</h3>
-                <p className="text-sm text-gray-500">Brak dostępnych danych</p>
-              </div>
-            </div>
-          </div>
-        );
       case 'settings':
         return (
           <ProjectSettings
